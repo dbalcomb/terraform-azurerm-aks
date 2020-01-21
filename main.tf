@@ -2,7 +2,10 @@ terraform {
   required_version = ">= 0.12"
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = format("%s-rg", var.prefix)
-  location = var.location
+module "cluster" {
+  source            = "./modules/cluster"
+  name              = var.name
+  location          = var.location
+  service_principal = var.service_principal
+  dns_prefix        = var.dns_prefix
 }
