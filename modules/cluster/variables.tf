@@ -5,7 +5,6 @@ variable "name" {
 
 variable "location" {
   description = "The cluster location"
-  default     = "uksouth"
   type        = string
 }
 
