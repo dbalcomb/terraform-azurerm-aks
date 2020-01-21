@@ -1,0 +1,16 @@
+name: lint
+on:
+  pull_request:
+    paths:
+    - '**.tf'
+    - .github/workflows/lint.yml
+jobs:
+  fmt:
+    name: fmt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: volcano-coffee-company/setup-terraform@v1
+      with:
+        version: ~0.12
+    - run: terraform fmt -check=true -diff -recursive
