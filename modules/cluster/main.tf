@@ -28,3 +28,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 }
+
+resource "azurerm_role_assignment" "metrics" {
+  principal_id         = var.service_principal.id
+  scope                = azurerm_kubernetes_cluster.aks.id
+  role_definition_name = "Monitoring Metrics Publisher"
+}
