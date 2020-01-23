@@ -20,4 +20,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
     client_id     = var.service_principal.id
     client_secret = var.service_principal.secret
   }
+
+  addon_profile {
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = var.log_analytics.workspace.id
+    }
+  }
 }

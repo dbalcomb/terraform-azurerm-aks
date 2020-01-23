@@ -16,6 +16,15 @@ variable "service_principal" {
   })
 }
 
+variable "log_analytics" {
+  description = "The Log Analytics configuration"
+  type = object({
+    workspace = object({
+      id = string
+    })
+  })
+}
+
 variable "dns_prefix" {
   description = "The cluster DNS prefix"
   type        = string

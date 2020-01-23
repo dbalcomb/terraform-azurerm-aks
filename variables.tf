@@ -13,3 +13,9 @@ variable "dns_prefix" {
   description = "The cluster DNS prefix"
   type        = string
 }
+
+variable "retention" {
+  description = "The Log Analytics retention period in days"
+  default     = 30
+  type        = number
+}
