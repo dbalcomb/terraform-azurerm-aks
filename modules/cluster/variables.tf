@@ -8,6 +8,21 @@ variable "location" {
   type        = string
 }
 
+variable "network" {
+  description = "The network configuration"
+  type = object({
+    dns_service_ip     = string
+    service_cidr       = string
+    docker_bridge_cidr = string
+    resource_group = object({
+      id = string
+    })
+    subnet = object({
+      id = string
+    })
+  })
+}
+
 variable "service_principal" {
   description = "The cluster service principal"
   type = object({

@@ -14,10 +14,17 @@ module "log_analytics" {
   retention = var.retention
 }
 
+module "network" {
+  source   = "./modules/network"
+  name     = format("%s-net", var.name)
+  location = var.location
+}
+
 module "cluster" {
   source            = "./modules/cluster"
   name              = var.name
   location          = var.location
+  network           = module.network
   service_principal = module.service_principal
   log_analytics     = module.log_analytics
   dns_prefix        = var.dns_prefix
