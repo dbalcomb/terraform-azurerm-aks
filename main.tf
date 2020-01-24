@@ -7,9 +7,9 @@ module "service_principal" {
   name   = var.name
 }
 
-module "log_analytics" {
-  source    = "./modules/log-analytics"
-  name      = format("%s-la", var.name)
+module "monitor" {
+  source    = "./modules/monitor"
+  name      = format("%s-mon", var.name)
   location  = var.location
   retention = var.retention
 }
@@ -24,8 +24,8 @@ module "cluster" {
   source            = "./modules/cluster"
   name              = var.name
   location          = var.location
+  monitor           = module.monitor
   network           = module.network
   service_principal = module.service_principal
-  log_analytics     = module.log_analytics
   dns_prefix        = var.dns_prefix
 }

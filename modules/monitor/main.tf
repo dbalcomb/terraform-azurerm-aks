@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_log_analytics_workspace" "main" {
-  name                = var.name
+  name                = format("%s-la", var.name)
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   sku                 = "PerGB2018"

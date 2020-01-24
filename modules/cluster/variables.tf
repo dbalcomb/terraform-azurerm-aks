@@ -8,6 +8,15 @@ variable "location" {
   type        = string
 }
 
+variable "monitor" {
+  description = "The monitor configuration"
+  type = object({
+    log_analytics_workspace = object({
+      id = string
+    })
+  })
+}
+
 variable "network" {
   description = "The network configuration"
   type = object({
@@ -28,15 +37,6 @@ variable "service_principal" {
   type = object({
     id     = string
     secret = string
-  })
-}
-
-variable "log_analytics" {
-  description = "The Log Analytics configuration"
-  type = object({
-    workspace = object({
-      id = string
-    })
   })
 }
 
