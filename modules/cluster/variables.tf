@@ -26,9 +26,9 @@ variable "network" {
     resource_group = object({
       id = string
     })
-    subnet = object({
+    subnets = map(object({
       id = string
-    })
+    }))
   })
 }
 

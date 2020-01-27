@@ -8,19 +8,19 @@ output "vnet" {
   value       = azurerm_virtual_network.main
 }
 
-output "subnet" {
-  description = "The virtual network subnet"
-  value       = azurerm_subnet.cluster
+output "subnets" {
+  description = "The virtual network subnets"
+  value       = azurerm_subnet.main
 }
 
 output "dns_service_ip" {
   description = "The DNS service IP"
-  value       = "10.0.0.10"
+  value       = local.dns_service_ip
 }
 
 output "service_cidr" {
   description = "The Kubernetes service address range"
-  value       = "10.0.0.0/16"
+  value       = local.service_cidr
 }
 
 output "docker_bridge_cidr" {
