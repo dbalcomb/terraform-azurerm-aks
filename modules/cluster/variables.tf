@@ -70,3 +70,20 @@ variable "pools" {
     disk_size      = number
   }))
 }
+
+variable "rbac_server_application" {
+  description = "The role-based access control server application"
+  default     = null
+  type = object({
+    id     = string
+    secret = string
+  })
+}
+
+variable "rbac_client_application" {
+  description = "The role-based access control client application"
+  default     = null
+  type = object({
+    id = string
+  })
+}

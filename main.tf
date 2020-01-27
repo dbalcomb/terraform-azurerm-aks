@@ -27,14 +27,28 @@ module "network" {
   ]
 }
 
+module "rbac_server_application" {
+  source  = "./modules/rbac-server-application"
+  name    = format("%s-rbac-server", var.name)
+  consent = false
+}
+
+module "rbac_client_application" {
+  source = "./modules/rbac-client-application"
+  name   = format("%s-rbac-client", var.name)
+  server = module.rbac_server_application
+}
+
 module "cluster" {
-  source            = "./modules/cluster"
-  name              = var.name
-  location          = var.location
-  monitor           = module.monitor
-  network           = module.network
-  service_principal = module.service_principal
-  dns_prefix        = var.dns_prefix
+  source                  = "./modules/cluster"
+  name                    = var.name
+  location                = var.location
+  monitor                 = module.monitor
+  network                 = module.network
+  service_principal       = module.service_principal
+  rbac_server_application = module.rbac_server_application
+  rbac_client_application = module.rbac_client_application
+  dns_prefix              = var.dns_prefix
 
   pools = {
     for name, pool in var.pools : name => {

@@ -41,6 +41,16 @@ resource "azurerm_kubernetes_cluster" "main" {
     client_secret = var.service_principal.secret
   }
 
+  role_based_access_control {
+    enabled = true
+
+    azure_active_directory {
+      client_app_id     = var.rbac_client_application.id
+      server_app_id     = var.rbac_server_application.id
+      server_app_secret = var.rbac_server_application.secret
+    }
+  }
+
   network_profile {
     network_plugin     = "azure"
     network_policy     = "azure"
