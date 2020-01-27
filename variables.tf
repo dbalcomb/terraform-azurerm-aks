@@ -19,3 +19,19 @@ variable "retention" {
   default     = 30
   type        = number
 }
+
+variable "subnets" {
+  description = "The network subnet configuration"
+  default = [
+    { name = "primary" }
+  ]
+  type = list(map(any))
+}
+
+variable "pools" {
+  description = "The cluster node pool configuration"
+  default = {
+    primary = {}
+  }
+  type = map(any)
+}
