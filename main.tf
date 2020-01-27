@@ -18,6 +18,13 @@ module "network" {
   source   = "./modules/network"
   name     = format("%s-net", var.name)
   location = var.location
+
+  subnets = [
+    for subnet in var.subnets : {
+      name = subnet.name
+      bits = lookup(subnet, "bits", 8)
+    }
+  ]
 }
 
 module "cluster" {
@@ -28,4 +35,14 @@ module "cluster" {
   network           = module.network
   service_principal = module.service_principal
   dns_prefix        = var.dns_prefix
+
+  pools = {
+    for name, pool in var.pools : name => {
+      subnet    = lookup(pool, "subnet", "primary")
+      size      = lookup(pool, "size", "Standard_D2s_v3")
+      scale     = lookup(pool, "scale", 1)
+      pod_limit = lookup(pool, "pod_limit", 250)
+      disk_size = lookup(pool, "disk_size", 30)
+    }
+  }
 }
