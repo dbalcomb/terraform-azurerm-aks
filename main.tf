@@ -9,14 +9,14 @@ module "service_principal" {
 
 module "monitor" {
   source    = "./modules/monitor"
-  name      = format("%s-mon", var.name)
+  name      = format("%s-monitor", var.name)
   location  = var.location
   retention = var.retention
 }
 
 module "network" {
   source   = "./modules/network"
-  name     = format("%s-net", var.name)
+  name     = format("%s-network", var.name)
   location = var.location
 
   subnets = [

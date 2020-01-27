@@ -1,3 +1,9 @@
+terraform {
+  required_providers {
+    azurerm = ">= 1.41"
+  }
+}
+
 locals {
   pools = {
     for name, pool in var.pools : name => pool
@@ -5,15 +11,15 @@ locals {
   }
 }
 
-resource "azurerm_resource_group" "rg" {
+resource "azurerm_resource_group" "main" {
   name     = format("%s-rg", var.name)
   location = var.location
 }
 
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = var.name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+resource "azurerm_kubernetes_cluster" "main" {
+  name                = var.name == "aks" ? "aks" : format("%s-aks", var.name)
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
   node_resource_group = format("%s-node-rg", var.name)
   dns_prefix          = var.dns_prefix
 
@@ -52,7 +58,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   for_each              = local.pools
   name                  = each.key
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
   vnet_subnet_id        = var.network.subnets[each.value.subnet].id
   vm_size               = each.value.size
   node_count            = each.value.scale
@@ -67,8 +73,8 @@ resource "azurerm_role_assignment" "network" {
   role_definition_name = "Network Contributor"
 }
 
-resource "azurerm_role_assignment" "metrics" {
+resource "azurerm_role_assignment" "monitor" {
   principal_id         = var.service_principal.id
-  scope                = azurerm_kubernetes_cluster.aks.id
+  scope                = azurerm_kubernetes_cluster.main.id
   role_definition_name = "Monitoring Metrics Publisher"
 }
