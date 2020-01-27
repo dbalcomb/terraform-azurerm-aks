@@ -44,3 +44,23 @@ variable "dns_prefix" {
   description = "The cluster DNS prefix"
   type        = string
 }
+
+variable "pools" {
+  description = "The cluster node pool configuration"
+  default = {
+    primary = {
+      subnet    = "primary"
+      size      = "Standard_D2s_v3"
+      scale     = 1
+      pod_limit = 250
+      disk_size = 30
+    }
+  }
+  type = map(object({
+    subnet    = string
+    size      = string
+    scale     = number
+    pod_limit = number
+    disk_size = number
+  }))
+}
