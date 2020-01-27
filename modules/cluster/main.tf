@@ -24,13 +24,16 @@ resource "azurerm_kubernetes_cluster" "main" {
   dns_prefix          = var.dns_prefix
 
   default_node_pool {
-    name            = "primary"
-    type            = "VirtualMachineScaleSets"
-    vnet_subnet_id  = var.network.subnets.primary.id
-    vm_size         = var.pools.primary.size
-    node_count      = var.pools.primary.scale
-    max_pods        = var.pools.primary.pod_limit
-    os_disk_size_gb = var.pools.primary.disk_size
+    name                = "primary"
+    type                = "VirtualMachineScaleSets"
+    vnet_subnet_id      = var.network.subnets.primary.id
+    vm_size             = var.pools.primary.size
+    node_count          = var.pools.primary.scale
+    enable_auto_scaling = var.pools.primary.auto_scale
+    min_count           = var.pools.primary.auto_scale == true ? var.pools.primary.auto_scale_min : null
+    max_count           = var.pools.primary.auto_scale == true ? var.pools.primary.auto_scale_max : null
+    max_pods            = var.pools.primary.pod_limit
+    os_disk_size_gb     = var.pools.primary.disk_size
   }
 
   service_principal {
@@ -53,6 +56,12 @@ resource "azurerm_kubernetes_cluster" "main" {
       log_analytics_workspace_id = var.monitor.log_analytics_workspace.id
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      default_node_pool.0.node_count
+    ]
+  }
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "additional" {
@@ -62,9 +71,18 @@ resource "azurerm_kubernetes_cluster_node_pool" "additional" {
   vnet_subnet_id        = var.network.subnets[each.value.subnet].id
   vm_size               = each.value.size
   node_count            = each.value.scale
+  enable_auto_scaling   = each.value.auto_scale
+  min_count             = each.value.auto_scale == true ? each.value.auto_scale_min : null
+  max_count             = each.value.auto_scale == true ? each.value.auto_scale_max : null
   max_pods              = each.value.pod_limit
   os_disk_size_gb       = each.value.disk_size
   os_type               = "Linux"
+
+  lifecycle {
+    ignore_changes = [
+      node_count
+    ]
+  }
 }
 
 resource "azurerm_role_assignment" "network" {

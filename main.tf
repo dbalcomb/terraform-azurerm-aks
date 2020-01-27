@@ -38,11 +38,14 @@ module "cluster" {
 
   pools = {
     for name, pool in var.pools : name => {
-      subnet    = lookup(pool, "subnet", "primary")
-      size      = lookup(pool, "size", "Standard_D2s_v3")
-      scale     = lookup(pool, "scale", 1)
-      pod_limit = lookup(pool, "pod_limit", 250)
-      disk_size = lookup(pool, "disk_size", 30)
+      subnet         = lookup(pool, "subnet", "primary")
+      size           = lookup(pool, "size", "Standard_D2s_v3")
+      scale          = lookup(pool, "scale", 1)
+      auto_scale     = lookup(pool, "auto_scale", true)
+      auto_scale_min = lookup(pool, "auto_scale_min", 1)
+      auto_scale_max = lookup(pool, "auto_scale_max", 3)
+      pod_limit      = lookup(pool, "pod_limit", 250)
+      disk_size      = lookup(pool, "disk_size", 30)
     }
   }
 }
