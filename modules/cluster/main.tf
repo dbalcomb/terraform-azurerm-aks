@@ -68,6 +68,10 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   addon_profile {
+    azure_policy {
+      enabled = true
+    }
+
     oms_agent {
       enabled                    = true
       log_analytics_workspace_id = var.monitor.log_analytics_workspace.id
