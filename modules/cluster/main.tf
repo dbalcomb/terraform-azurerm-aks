@@ -5,6 +5,11 @@ locals {
   }
 }
 
+resource "tls_private_key" "ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 resource "azurerm_resource_group" "main" {
   name     = format("%s-rg", var.name)
   location = var.location
@@ -42,6 +47,14 @@ resource "azurerm_kubernetes_cluster" "main" {
       client_app_id     = var.rbac_client_application.id
       server_app_id     = var.rbac_server_application.id
       server_app_secret = var.rbac_server_application.secret
+    }
+  }
+
+  linux_profile {
+    admin_username = "aks"
+
+    ssh_key {
+      key_data = tls_private_key.ssh.public_key_openssh
     }
   }
 
