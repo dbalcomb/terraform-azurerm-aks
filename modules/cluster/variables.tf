@@ -87,3 +87,9 @@ variable "rbac_client_application" {
     id = string
   })
 }
+
+variable "administrators" {
+  description = "The cluster administrator user email addresses"
+  default     = []
+  type        = list(string)
+}
