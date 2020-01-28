@@ -187,7 +187,7 @@ resource "kubernetes_cluster_role_binding" "admin" {
   }
 
   role_ref {
-    name      = "aks-admin"
+    name      = kubernetes_cluster_role.admin.metadata.0.name
     kind      = "ClusterRole"
     api_group = "rbac.authorization.k8s.io"
   }
