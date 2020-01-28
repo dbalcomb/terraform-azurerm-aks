@@ -49,6 +49,7 @@ module "cluster" {
   rbac_server_application = module.rbac_server_application
   rbac_client_application = module.rbac_client_application
   dns_prefix              = var.dns_prefix
+  administrators          = var.administrators
 
   pools = {
     for name, pool in var.pools : name => {

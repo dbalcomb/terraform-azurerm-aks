@@ -35,3 +35,9 @@ variable "pools" {
   }
   type = map(any)
 }
+
+variable "administrators" {
+  description = "The cluster administrator user email addresses"
+  default     = []
+  type        = list(string)
+}
