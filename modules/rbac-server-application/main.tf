@@ -1,11 +1,3 @@
-terraform {
-  required_providers {
-    azuread = ">= 0.7"
-    null    = ">= 2.1"
-    random  = ">= 2.2"
-  }
-}
-
 data "azuread_service_principal" "graph" {
   display_name = "Microsoft Graph"
 }
