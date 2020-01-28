@@ -26,6 +26,9 @@ variable "network" {
     resource_group = object({
       id = string
     })
+    ip = object({
+      id = string
+    })
     subnets = map(object({
       id = string
     }))

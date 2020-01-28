@@ -30,3 +30,12 @@ resource "azurerm_subnet" "main" {
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefix       = each.value.cidr
 }
+
+resource "azurerm_public_ip" "main" {
+  name                = format("%s-ip", var.name)
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  sku                 = "Standard"
+  allocation_method   = "Static"
+  domain_name_label   = var.dns_prefix
+}

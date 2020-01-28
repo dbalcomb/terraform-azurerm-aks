@@ -65,6 +65,10 @@ resource "azurerm_kubernetes_cluster" "main" {
     dns_service_ip     = var.network.dns_service_ip
     service_cidr       = var.network.service_cidr
     docker_bridge_cidr = var.network.docker_bridge_cidr
+
+    load_balancer_profile {
+      outbound_ip_address_ids = [var.network.ip.id]
+    }
   }
 
   addon_profile {
