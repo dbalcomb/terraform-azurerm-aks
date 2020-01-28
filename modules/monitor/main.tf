@@ -1,9 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = ">= 1.41"
-  }
-}
-
 resource "azurerm_resource_group" "main" {
   name     = format("%s-rg", var.name)
   location = var.location

@@ -1,9 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = ">= 1.41"
-  }
-}
-
 locals {
   address_blocks = cidrsubnets(var.address_space, 8, var.subnets.*.bits...)
   dns_service_ip = cidrhost(local.address_blocks.0, 10)
