@@ -27,3 +27,8 @@ output "docker_bridge_cidr" {
   description = "The Docker Bridge address"
   value       = "172.17.0.1/16"
 }
+
+output "ip" {
+  description = "The public IP address"
+  value       = azurerm_public_ip.main
+}

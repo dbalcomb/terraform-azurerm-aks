@@ -14,6 +14,11 @@ variable "address_space" {
   type        = string
 }
 
+variable "dns_prefix" {
+  description = "The public IP DNS prefix"
+  type        = string
+}
+
 variable "subnets" {
   description = "The virtual network subnet configuration"
   default = [
