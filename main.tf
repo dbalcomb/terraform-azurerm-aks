@@ -8,10 +8,11 @@ module "service_principal" {
 }
 
 module "registry" {
-  source     = "./modules/registry"
-  name       = format("%s-registry", var.name)
-  location   = var.location
-  dns_prefix = var.dns_prefix
+  source            = "./modules/registry"
+  name              = format("%s-registry", var.name)
+  location          = var.location
+  dns_prefix        = var.dns_prefix
+  service_principal = module.service_principal
 }
 
 module "monitor" {
@@ -22,10 +23,11 @@ module "monitor" {
 }
 
 module "network" {
-  source     = "./modules/network"
-  name       = format("%s-network", var.name)
-  location   = var.location
-  dns_prefix = var.dns_prefix
+  source            = "./modules/network"
+  name              = format("%s-network", var.name)
+  location          = var.location
+  dns_prefix        = var.dns_prefix
+  service_principal = module.service_principal
 
   subnets = [
     for subnet in var.subnets : {

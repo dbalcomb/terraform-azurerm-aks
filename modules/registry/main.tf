@@ -10,3 +10,9 @@ resource "azurerm_container_registry" "main" {
   sku                 = var.sku
   admin_enabled       = true
 }
+
+resource "azurerm_role_assignment" "main" {
+  principal_id         = var.service_principal.id
+  scope                = azurerm_resource_group.main.id
+  role_definition_name = "AcrPull"
+}
