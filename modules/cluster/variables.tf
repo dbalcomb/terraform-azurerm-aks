@@ -96,12 +96,3 @@ variable "administrators" {
   default     = []
   type        = list(string)
 }
-
-variable "registry" {
-  description = "The container registry configuration"
-  type = object({
-    resource_group = object({
-      id = string
-    })
-  })
-}
