@@ -39,9 +39,3 @@ resource "azurerm_public_ip" "main" {
   allocation_method   = "Static"
   domain_name_label   = var.dns_prefix
 }
-
-resource "azurerm_role_assignment" "main" {
-  principal_id         = var.service_principal.id
-  scope                = azurerm_resource_group.main.id
-  role_definition_name = "Network Contributor"
-}

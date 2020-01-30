@@ -21,3 +21,10 @@ resource "azuread_service_principal_password" "secret" {
   value                = random_password.secret.result
   end_date             = "2299-12-31T00:00:00Z"
 }
+
+resource "azurerm_role_assignment" "main" {
+  for_each             = var.role_assignments
+  principal_id         = azuread_service_principal.main.id
+  scope                = each.value.scope
+  role_definition_name = each.value.role
+}

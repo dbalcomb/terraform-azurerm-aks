@@ -5,6 +5,13 @@ terraform {
 module "service_principal" {
   source = "./modules/service-principal"
   name   = var.name
+
+  role_assignments = {
+    network = {
+      scope = module.network.resource_group.id
+      role  = "Network Contributor"
+    }
+  }
 }
 
 module "monitor" {
