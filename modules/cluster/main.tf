@@ -113,3 +113,22 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
     ]
   }
 }
+
+module "dashboard" {
+  source = "./addons/dashboard"
+  name   = format("%s-dashboard", var.name)
+}
+
+module "monitor" {
+  source            = "./addons/monitor"
+  name              = format("%s-monitor", var.name)
+  cluster           = azurerm_kubernetes_cluster.main
+  service_principal = var.service_principal
+}
+
+module "rbac" {
+  source         = "./addons/rbac"
+  name           = format("%s-admin", var.name)
+  cluster        = azurerm_kubernetes_cluster.main
+  administrators = var.administrators
+}

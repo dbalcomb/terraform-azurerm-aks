@@ -1,12 +1,12 @@
-resource "azurerm_role_assignment" "monitor" {
+resource "azurerm_role_assignment" "main" {
   principal_id         = var.service_principal.id
-  scope                = azurerm_kubernetes_cluster.main.id
+  scope                = var.cluster.id
   role_definition_name = "Monitoring Metrics Publisher"
 }
 
-resource "kubernetes_cluster_role" "monitor" {
+resource "kubernetes_cluster_role" "main" {
   metadata {
-    name = "aks-monitor"
+    name = var.name
   }
 
   rule {
@@ -16,13 +16,13 @@ resource "kubernetes_cluster_role" "monitor" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "monitor" {
+resource "kubernetes_cluster_role_binding" "main" {
   metadata {
-    name = "aks-monitor"
+    name = var.name
   }
 
   role_ref {
-    name      = kubernetes_cluster_role.monitor.metadata.0.name
+    name      = kubernetes_cluster_role.main.metadata.0.name
     kind      = "ClusterRole"
     api_group = "rbac.authorization.k8s.io"
   }
