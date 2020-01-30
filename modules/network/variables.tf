@@ -29,3 +29,10 @@ variable "subnets" {
     bits = number
   }))
 }
+
+variable "service_principal" {
+  description = "The service principal"
+  type = object({
+    id = string
+  })
+}

@@ -18,3 +18,10 @@ variable "dns_prefix" {
   description = "The DNS prefix"
   type        = string
 }
+
+variable "service_principal" {
+  description = "The service principal"
+  type = object({
+    id = string
+  })
+}
