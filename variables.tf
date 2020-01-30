@@ -41,3 +41,13 @@ variable "administrators" {
   default     = []
   type        = list(string)
 }
+
+variable "registry" {
+  description = "The container registry"
+  type = object({
+    id = string
+    resource_group = object({
+      id = string
+    })
+  })
+}
