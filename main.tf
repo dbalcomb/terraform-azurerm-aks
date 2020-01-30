@@ -7,14 +7,6 @@ module "service_principal" {
   name   = var.name
 }
 
-module "registry" {
-  source            = "./modules/registry"
-  name              = format("%s-registry", var.name)
-  location          = var.location
-  dns_prefix        = var.dns_prefix
-  service_principal = module.service_principal
-}
-
 module "monitor" {
   source    = "./modules/monitor"
   name      = format("%s-monitor", var.name)
@@ -55,7 +47,6 @@ module "cluster" {
   location                = var.location
   monitor                 = module.monitor
   network                 = module.network
-  registry                = module.registry
   service_principal       = module.service_principal
   rbac_server_application = module.rbac_server_application
   rbac_client_application = module.rbac_client_application
