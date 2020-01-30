@@ -26,11 +26,10 @@ module "monitor" {
 }
 
 module "network" {
-  source            = "./modules/network"
-  name              = format("%s-network", var.name)
-  location          = var.location
-  dns_prefix        = var.dns_prefix
-  service_principal = module.service_principal
+  source     = "./modules/network"
+  name       = format("%s-network", var.name)
+  location   = var.location
+  dns_prefix = var.dns_prefix
 
   subnets = [
     for subnet in var.subnets : {
