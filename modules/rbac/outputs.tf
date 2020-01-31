@@ -7,3 +7,8 @@ output "client" {
   description = "The client application registration"
   value       = module.client
 }
+
+output "enabled" {
+  description = "Role-based access control is enabled"
+  value       = var.enabled
+}

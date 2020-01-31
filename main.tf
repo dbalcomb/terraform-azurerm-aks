@@ -1,7 +1,3 @@
-terraform {
-  required_version = ">= 0.12"
-}
-
 module "service_principal" {
   source = "./modules/service-principal"
   name   = var.name
@@ -43,6 +39,7 @@ module "rbac" {
   source  = "./modules/rbac"
   name    = format("%s-rbac", var.name)
   consent = false
+  enabled = try(var.rbac.enabled, true)
 }
 
 module "cluster" {

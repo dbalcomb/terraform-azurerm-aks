@@ -15,3 +15,9 @@ variable "administrators" {
   default     = []
   type        = list(string)
 }
+
+variable "enabled" {
+  description = "Enable role-based access control"
+  default     = true
+  type        = bool
+}

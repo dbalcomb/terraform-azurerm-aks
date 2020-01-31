@@ -1,4 +1,5 @@
 locals {
+  rbac_enabled = try(var.rbac.enabled, true)
   pools = {
     for name, pool in var.pools : name => pool
     if name != "primary"
@@ -41,12 +42,16 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   role_based_access_control {
-    enabled = true
+    enabled = local.rbac_enabled
 
-    azure_active_directory {
-      client_app_id     = var.rbac.client.id
-      server_app_id     = var.rbac.server.id
-      server_app_secret = var.rbac.server.secret
+    dynamic "azure_active_directory" {
+      for_each = local.rbac_enabled ? [1] : []
+
+      content {
+        client_app_id     = try(var.rbac.client.id, null)
+        server_app_id     = try(var.rbac.server.id, null)
+        server_app_secret = try(var.rbac.server.secret, null)
+      }
     }
   }
 
@@ -131,4 +136,5 @@ module "rbac" {
   name           = format("%s-admin", var.name)
   cluster        = azurerm_kubernetes_cluster.main
   administrators = var.administrators
+  enabled        = local.rbac_enabled
 }

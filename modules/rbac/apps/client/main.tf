@@ -1,8 +1,10 @@
 locals {
-  scopes = { for item in var.server.scopes : item.value => item.id }
+  map    = var.server.scopes == null ? {} : var.server.scopes
+  scopes = { for item in local.map : item.value => item.id }
 }
 
 resource "azuread_application" "main" {
+  count         = var.enabled ? 1 : 0
   name          = var.name
   type          = "native"
   reply_urls    = [format("https://%s", var.name)]
@@ -19,5 +21,6 @@ resource "azuread_application" "main" {
 }
 
 resource "azuread_service_principal" "main" {
-  application_id = azuread_application.main.application_id
+  count          = var.enabled ? 1 : 0
+  application_id = azuread_application.main.0.application_id
 }
