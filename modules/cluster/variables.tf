@@ -74,20 +74,17 @@ variable "pools" {
   }))
 }
 
-variable "rbac_server_application" {
-  description = "The role-based access control server application"
+variable "rbac" {
+  description = "The role-based access control configuration"
   default     = null
   type = object({
-    id     = string
-    secret = string
-  })
-}
-
-variable "rbac_client_application" {
-  description = "The role-based access control client application"
-  default     = null
-  type = object({
-    id = string
+    server = object({
+      id     = string
+      secret = string
+    })
+    client = object({
+      id = string
+    })
   })
 }
 

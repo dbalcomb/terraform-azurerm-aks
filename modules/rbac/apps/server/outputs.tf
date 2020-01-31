@@ -11,4 +11,10 @@ output "scopes" {
 output "secret" {
   description = "The client secret / application password"
   value       = azuread_service_principal_password.secret.value
+  sensitive   = true
+}
+
+output "service_principal" {
+  description = "The service principal"
+  value       = azuread_service_principal.main
 }
