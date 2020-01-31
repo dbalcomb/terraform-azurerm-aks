@@ -12,5 +12,5 @@ jobs:
     - uses: actions/checkout@v2
     - uses: volcano-coffee-company/setup-terraform@v1
       with:
-        version: ~0.12
+        version: ~0.12.20
     - run: terraform fmt -check=true -diff -recursive

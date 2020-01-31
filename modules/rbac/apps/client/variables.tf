@@ -5,11 +5,11 @@ variable "name" {
 
 variable "server" {
   description = "The server application"
-  type = object({
-    id = string
-    scopes = list(object({
-      id    = string
-      value = string
-    }))
-  })
+  type        = map(any)
+}
+
+variable "enabled" {
+  description = "Enable role-based access control"
+  default     = true
+  type        = bool
 }

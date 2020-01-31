@@ -51,3 +51,9 @@ variable "registry" {
     })
   })
 }
+
+variable "rbac" {
+  description = "The role-based access control configuration"
+  default     = null
+  type        = any
+}

@@ -77,15 +77,7 @@ variable "pools" {
 variable "rbac" {
   description = "The role-based access control configuration"
   default     = null
-  type = object({
-    server = object({
-      id     = string
-      secret = string
-    })
-    client = object({
-      id = string
-    })
-  })
+  type        = any
 }
 
 variable "administrators" {

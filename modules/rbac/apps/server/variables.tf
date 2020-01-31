@@ -8,3 +8,9 @@ variable "consent" {
   default     = false
   type        = bool
 }
+
+variable "enabled" {
+  description = "Enable role-based access control"
+  default     = true
+  type        = bool
+}
