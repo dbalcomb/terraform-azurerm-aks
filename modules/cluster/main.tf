@@ -44,9 +44,9 @@ resource "azurerm_kubernetes_cluster" "main" {
     enabled = true
 
     azure_active_directory {
-      client_app_id     = var.rbac_client_application.id
-      server_app_id     = var.rbac_server_application.id
-      server_app_secret = var.rbac_server_application.secret
+      client_app_id     = var.rbac.client.id
+      server_app_id     = var.rbac.server.id
+      server_app_secret = var.rbac.server.secret
     }
   }
 

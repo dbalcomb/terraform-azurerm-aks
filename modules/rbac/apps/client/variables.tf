@@ -1,5 +1,5 @@
 variable "name" {
-  description = "The resource name"
+  description = "The application name"
   type        = string
 }
 
