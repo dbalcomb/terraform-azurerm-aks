@@ -120,19 +120,19 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
 }
 
 module "dashboard" {
-  source = "./addons/dashboard"
+  source = "./dashboard"
   name   = format("%s-dashboard", var.name)
 }
 
 module "monitor" {
-  source            = "./addons/monitor"
+  source            = "./monitor"
   name              = format("%s-monitor", var.name)
   cluster           = azurerm_kubernetes_cluster.main
   service_principal = var.service_principal
 }
 
 module "rbac" {
-  source         = "./addons/rbac"
+  source         = "./rbac"
   name           = format("%s-admin", var.name)
   cluster        = azurerm_kubernetes_cluster.main
   administrators = var.administrators
