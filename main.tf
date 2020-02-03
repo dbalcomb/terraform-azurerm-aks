@@ -19,6 +19,7 @@ module "monitor" {
   name      = format("%s-monitor", var.name)
   location  = var.location
   retention = var.retention
+  enabled   = try(var.monitor.enabled, true)
 }
 
 module "network" {

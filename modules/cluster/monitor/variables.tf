@@ -16,3 +16,9 @@ variable "service_principal" {
     id = string
   })
 }
+
+variable "enabled" {
+  description = "Enable monitoring"
+  default     = true
+  type        = bool
+}

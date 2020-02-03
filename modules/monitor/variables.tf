@@ -13,3 +13,9 @@ variable "retention" {
   default     = 30
   type        = number
 }
+
+variable "enabled" {
+  description = "Enable monitoring"
+  default     = true
+  type        = bool
+}

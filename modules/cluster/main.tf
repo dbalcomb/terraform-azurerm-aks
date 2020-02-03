@@ -1,5 +1,6 @@
 locals {
-  rbac_enabled = try(var.rbac.enabled, true)
+  rbac_enabled    = try(var.rbac.enabled, true)
+  monitor_enabled = try(var.monitor.enabled, true)
   pools = {
     for name, pool in var.pools : name => pool
     if name != "primary"
@@ -86,8 +87,8 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
 
     oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = var.monitor.log_analytics_workspace.id
+      enabled                    = local.monitor_enabled
+      log_analytics_workspace_id = try(var.monitor.log_analytics_workspace.id, null)
     }
   }
 
@@ -129,6 +130,7 @@ module "monitor" {
   name              = format("%s-monitor", var.name)
   cluster           = azurerm_kubernetes_cluster.main
   service_principal = var.service_principal
+  enabled           = local.monitor_enabled
 }
 
 # Note: Terraform has trouble understanding that the group keys, when used via
