@@ -1,4 +1,6 @@
 resource "kubernetes_cluster_role" "main" {
+  count = var.enabled ? 1 : 0
+
   metadata {
     name = var.name
   }
@@ -194,12 +196,14 @@ resource "kubernetes_cluster_role" "main" {
 }
 
 resource "kubernetes_cluster_role_binding" "main" {
+  count = var.enabled ? 1 : 0
+
   metadata {
     name = var.name
   }
 
   role_ref {
-    name      = kubernetes_cluster_role.main.metadata.0.name
+    name      = kubernetes_cluster_role.main.0.metadata.0.name
     kind      = "ClusterRole"
     api_group = "rbac.authorization.k8s.io"
   }

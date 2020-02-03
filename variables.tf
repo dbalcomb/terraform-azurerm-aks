@@ -57,3 +57,9 @@ variable "monitor" {
   default     = null
   type        = any
 }
+
+variable "dashboard" {
+  description = "The dashboard configuration"
+  default     = null
+  type        = any
+}
