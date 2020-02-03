@@ -60,6 +60,7 @@ module "cluster" {
   service_principal = module.service_principal
   rbac              = module.rbac
   dns_prefix        = var.dns_prefix
+  dashboard         = var.dashboard
 
   pools = {
     for name, pool in var.pools : name => {

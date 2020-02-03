@@ -1,6 +1,7 @@
 locals {
-  rbac_enabled    = try(var.rbac.enabled, true)
-  monitor_enabled = try(var.monitor.enabled, true)
+  rbac_enabled      = try(var.rbac.enabled, true)
+  monitor_enabled   = try(var.monitor.enabled, true)
+  dashboard_enabled = try(var.dashboard.enabled, true)
   pools = {
     for name, pool in var.pools : name => pool
     if name != "primary"
@@ -83,7 +84,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
 
     kube_dashboard {
-      enabled = true
+      enabled = local.dashboard_enabled
     }
 
     oms_agent {
@@ -121,8 +122,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
 }
 
 module "dashboard" {
-  source = "./dashboard"
-  name   = format("%s-dashboard", var.name)
+  source  = "./dashboard"
+  name    = format("%s-dashboard", var.name)
+  enabled = local.dashboard_enabled
 }
 
 module "monitor" {
