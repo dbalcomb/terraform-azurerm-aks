@@ -40,6 +40,14 @@ module "rbac" {
   name    = format("%s-rbac", var.name)
   consent = false
   enabled = try(var.rbac.enabled, true)
+
+  groups = {
+    admin = {
+      label   = "Azure Kubernetes Service Administrators"
+      members = try(var.rbac.administrators, [])
+      enabled = try(var.rbac.enabled, true) && length(try(var.rbac.administrators, [])) > 0
+    }
+  }
 }
 
 module "cluster" {
@@ -51,7 +59,6 @@ module "cluster" {
   service_principal = module.service_principal
   rbac              = module.rbac
   dns_prefix        = var.dns_prefix
-  administrators    = var.administrators
 
   pools = {
     for name, pool in var.pools : name => {

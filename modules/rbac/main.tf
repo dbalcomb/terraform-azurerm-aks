@@ -11,3 +11,8 @@ module "client" {
   server  = module.server
   enabled = var.enabled
 }
+
+module "groups" {
+  source = "./groups"
+  config = var.groups
+}
