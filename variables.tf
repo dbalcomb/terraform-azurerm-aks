@@ -14,12 +14,6 @@ variable "dns_prefix" {
   type        = string
 }
 
-variable "retention" {
-  description = "The Log Analytics retention period in days"
-  default     = 30
-  type        = number
-}
-
 variable "subnets" {
   description = "The network subnet configuration"
   default = [

@@ -18,7 +18,7 @@ module "monitor" {
   source    = "./modules/monitor"
   name      = format("%s-monitor", var.name)
   location  = var.location
-  retention = var.retention
+  retention = try(var.monitor.retention, 30)
   enabled   = try(var.monitor.enabled, true)
 }
 
