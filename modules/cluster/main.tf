@@ -131,10 +131,29 @@ module "monitor" {
   service_principal = var.service_principal
 }
 
+# Note: Terraform has trouble understanding that the group keys, when used via
+# try and lookup functions, are already known before the apply stage. We must
+# therefore use the group configuration, which does not have this problem, and
+# remap the values.
+#
+# Todo: Remove the following locals when the above limitation is fixed or when
+# the ability to provide optional nested values is added.
+#
+# See:
+# https://github.com/hashicorp/terraform/issues/19898
+
+locals {
+  groups_conf = try(var.rbac.groups.config, {})
+  groups_list = try(var.rbac.groups.groups, {})
+  groups = {
+    for key in keys(local.groups_conf) : key => local.groups_list[key]
+  }
+}
+
 module "rbac" {
-  source         = "./rbac"
-  name           = format("%s-admin", var.name)
-  cluster        = azurerm_kubernetes_cluster.main
-  administrators = var.administrators
-  enabled        = local.rbac_enabled
+  source  = "./rbac"
+  name    = format("%s-cluster", var.name)
+  groups  = local.groups
+  cluster = azurerm_kubernetes_cluster.main
+  enabled = local.rbac_enabled
 }

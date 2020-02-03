@@ -79,9 +79,3 @@ variable "rbac" {
   default     = null
   type        = any
 }
-
-variable "administrators" {
-  description = "The cluster administrator user email addresses"
-  default     = []
-  type        = list(string)
-}

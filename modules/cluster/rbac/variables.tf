@@ -10,10 +10,11 @@ variable "cluster" {
   })
 }
 
-variable "administrators" {
-  description = "The cluster administrator user email addresses"
-  default     = []
-  type        = list(string)
+variable "groups" {
+  description = "The group information"
+  type = map(object({
+    id = string
+  }))
 }
 
 variable "enabled" {

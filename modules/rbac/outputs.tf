@@ -8,6 +8,11 @@ output "client" {
   value       = module.client
 }
 
+output "groups" {
+  description = "The group information"
+  value       = module.groups
+}
+
 output "enabled" {
   description = "Role-based access control is enabled"
   value       = var.enabled
