@@ -10,11 +10,8 @@ variable "location" {
 
 variable "monitor" {
   description = "The monitor configuration"
-  type = object({
-    log_analytics_workspace = object({
-      id = string
-    })
-  })
+  default     = null
+  type        = any
 }
 
 variable "network" {

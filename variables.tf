@@ -51,3 +51,9 @@ variable "rbac" {
   default     = null
   type        = any
 }
+
+variable "monitor" {
+  description = "The monitoring configuration"
+  default     = null
+  type        = any
+}
