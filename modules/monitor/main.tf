@@ -1,3 +1,12 @@
+resource "random_id" "main" {
+  count       = var.enabled ? 1 : 0
+  byte_length = 4
+
+  keepers = {
+    name = var.name
+  }
+}
+
 resource "azurerm_resource_group" "main" {
   count    = var.enabled ? 1 : 0
   name     = format("%s-rg", var.name)
@@ -6,7 +15,7 @@ resource "azurerm_resource_group" "main" {
 
 resource "azurerm_log_analytics_workspace" "main" {
   count               = var.enabled ? 1 : 0
-  name                = format("%s-la", var.name)
+  name                = format("%s-%s-la", var.name, substr(random_id.main.0.dec, 0, 8))
   resource_group_name = azurerm_resource_group.main.0.name
   location            = azurerm_resource_group.main.0.location
   sku                 = "PerGB2018"
