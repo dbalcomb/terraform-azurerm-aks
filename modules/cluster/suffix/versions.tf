@@ -1,5 +1,5 @@
 terraform {
   required_providers {
-    azurerm = ">= 1.41"
+    external = ">= 1.2"
   }
 }

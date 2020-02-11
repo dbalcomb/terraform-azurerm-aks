@@ -14,9 +14,14 @@ module "service_principal" {
   }
 }
 
+module "suffix" {
+  source = "./modules/cluster/suffix"
+  input  = var.dns_prefix
+}
+
 module "monitor" {
   source    = "./modules/monitor"
-  name      = format("%s-monitor", var.name)
+  name      = format("%s-monitor-%s", var.name, module.suffix.output)
   location  = var.location
   retention = try(var.monitor.retention, 30)
   enabled   = try(var.monitor.enabled, true)
@@ -24,7 +29,7 @@ module "monitor" {
 
 module "network" {
   source     = "./modules/network"
-  name       = format("%s-network", var.name)
+  name       = format("%s-network-%s", var.name, module.suffix.output)
   location   = var.location
   dns_prefix = var.dns_prefix
 
@@ -38,7 +43,7 @@ module "network" {
 
 module "rbac" {
   source  = "./modules/rbac"
-  name    = format("%s-rbac", var.name)
+  name    = format("%s-cluster-%s-rbac", var.name, module.suffix.output)
   consent = false
   enabled = try(var.rbac.enabled, true)
 
@@ -53,7 +58,7 @@ module "rbac" {
 
 module "cluster" {
   source            = "./modules/cluster"
-  name              = var.name
+  name              = format("%s-cluster-%s", var.name, module.suffix.output)
   location          = var.location
   monitor           = module.monitor
   network           = module.network
@@ -61,6 +66,8 @@ module "cluster" {
   rbac              = module.rbac
   dns_prefix        = var.dns_prefix
   dashboard         = var.dashboard
+
+  node_resource_group_name = format("%s-nodepool-%s-rg", var.name, module.suffix.output)
 
   pools = {
     for name, pool in var.pools : name => {

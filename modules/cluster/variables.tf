@@ -82,3 +82,8 @@ variable "dashboard" {
   default     = null
   type        = any
 }
+
+variable "node_resource_group_name" {
+  description = "The node resource group name"
+  type        = string
+}
