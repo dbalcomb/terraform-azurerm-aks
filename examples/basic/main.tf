@@ -13,7 +13,9 @@ module "aks" {
   registry   = module.acr
 
   rbac = {
-    enabled        = true
-    administrators = ["daniel.balcomb@outlook.com"]
+    enabled = true
+    administrators = [
+      "daniel.balcomb_outlook.com#EXT#@danielbalcomboutlook.onmicrosoft.com",
+    ]
   }
 }
