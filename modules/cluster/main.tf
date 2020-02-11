@@ -19,14 +19,14 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_kubernetes_cluster" "main" {
-  name                = var.name == "aks" ? "aks" : format("%s-aks", var.name)
+  name                = format("%s-aks", var.name)
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  node_resource_group = format("%s-node-rg", var.name)
+  node_resource_group = var.node_resource_group_name
   dns_prefix          = var.dns_prefix
 
   default_node_pool {
-    name                = "primary"
+    name                = "nodepool"
     type                = "VirtualMachineScaleSets"
     vnet_subnet_id      = var.network.subnets.primary.id
     vm_size             = var.pools.primary.size
@@ -156,7 +156,7 @@ locals {
 
 module "rbac" {
   source  = "./rbac"
-  name    = format("%s-cluster", var.name)
+  name    = format("%s-rbac", var.name)
   groups  = local.groups
   cluster = azurerm_kubernetes_cluster.main
   enabled = local.rbac_enabled
