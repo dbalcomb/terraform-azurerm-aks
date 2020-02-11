@@ -2,6 +2,7 @@ locals {
   rbac_enabled      = try(var.rbac.enabled, true)
   monitor_enabled   = try(var.monitor.enabled, true)
   dashboard_enabled = try(var.dashboard.enabled, true)
+  kured_enabled     = try(var.kured.enabled, true)
   pools = {
     for name, pool in var.pools : name => pool
     if name != "primary"
@@ -160,4 +161,10 @@ module "rbac" {
   groups  = local.groups
   cluster = azurerm_kubernetes_cluster.main
   enabled = local.rbac_enabled
+}
+
+module "kured" {
+  source  = "./kured"
+  name    = format("%s-kured", var.name)
+  enabled = local.kured_enabled
 }

@@ -63,3 +63,9 @@ variable "ingress" {
   default     = null
   type        = any
 }
+
+variable "kured" {
+  description = "The kured configuration"
+  default     = null
+  type        = any
+}
