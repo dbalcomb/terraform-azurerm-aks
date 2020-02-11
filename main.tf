@@ -82,3 +82,12 @@ module "cluster" {
     }
   }
 }
+
+module "ingress" {
+  source              = "./modules/ingress"
+  name                = format("%s-cluster-%s-ingress", var.name, module.suffix.output)
+  ip_address          = module.network.ip.ip_address
+  resource_group_name = module.network.resource_group.name
+  replicas            = try(var.ingress.replicas, 1)
+  enabled             = try(var.ingress.enabled, true)
+}
