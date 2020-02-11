@@ -66,6 +66,7 @@ module "cluster" {
   rbac              = module.rbac
   dns_prefix        = var.dns_prefix
   dashboard         = var.dashboard
+  kured             = var.kured
 
   node_resource_group_name = format("%s-nodepool-%s-rg", var.name, module.suffix.output)
 
