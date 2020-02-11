@@ -57,3 +57,9 @@ variable "dashboard" {
   default     = null
   type        = any
 }
+
+variable "ingress" {
+  description = "The ingress configuration"
+  default     = null
+  type        = any
+}
