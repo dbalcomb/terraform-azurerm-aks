@@ -21,9 +21,6 @@ jobs:
     - uses: volcano-coffee-company/setup-terraform@v1
       with:
         version: ~0.12.20
-    - uses: azure/setup-kubectl@v1
-      with:
-        version: latest
     - run: terraform init -input=false -backend=false
       working-directory: ./examples/${{ matrix.example }}
     - run: terraform plan -input=false
