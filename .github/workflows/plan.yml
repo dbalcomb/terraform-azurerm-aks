@@ -16,6 +16,7 @@ jobs:
       matrix:
         example:
         - basic
+        - ingress
     steps:
     - uses: actions/checkout@v2
     - uses: volcano-coffee-company/setup-terraform@v1
