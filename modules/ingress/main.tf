@@ -1,3 +1,9 @@
+data "helm_repository" "main" {
+  count = var.enabled ? 1 : 0
+  name  = "stable"
+  url   = "https://kubernetes-charts.storage.googleapis.com"
+}
+
 resource "kubernetes_namespace" "main" {
   count = var.enabled ? 1 : 0
 
@@ -7,10 +13,11 @@ resource "kubernetes_namespace" "main" {
 }
 
 resource "helm_release" "main" {
-  count     = var.enabled ? 1 : 0
-  name      = var.name
-  namespace = kubernetes_namespace.main.0.metadata.0.name
-  chart     = "stable/nginx-ingress"
+  count      = var.enabled ? 1 : 0
+  name       = var.name
+  namespace  = kubernetes_namespace.main.0.metadata.0.name
+  repository = data.helm_repository.main.0.metadata.0.name
+  chart      = "nginx-ingress"
 
   set {
     name  = "controller.replicaCount"
