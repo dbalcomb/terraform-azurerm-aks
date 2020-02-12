@@ -64,3 +64,8 @@ resource "helm_release" "main" {
     value = "10254"
   }
 }
+
+module "cert_manager" {
+  source  = "./cert-manager"
+  enabled = var.enabled
+}

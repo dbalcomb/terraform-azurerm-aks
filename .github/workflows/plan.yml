@@ -21,6 +21,14 @@ jobs:
     - uses: volcano-coffee-company/setup-terraform@v1
       with:
         version: ~0.12.20
+    - name: install kubectl
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https
+        curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+        echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+        sudo apt-get update
+        sudo apt-get install -y kubectl
     - run: terraform init -input=false -backend=false
       working-directory: ./examples/${{ matrix.example }}
     - run: terraform plan -input=false
