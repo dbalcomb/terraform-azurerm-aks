@@ -38,3 +38,17 @@ resource "kubernetes_cluster_role_binding" "main" {
     api_group = "rbac.authorization.k8s.io"
   }
 }
+
+resource "kubernetes_config_map" "main" {
+  count = var.enabled ? 1 : 0
+
+  metadata {
+    name      = var.name
+    namespace = "kube-system"
+  }
+
+  data = {
+    "schema-version"                      = "v1"
+    "prometheus-data-collection-settings" = file("${path.module}/templates/prometheus.tpl")
+  }
+}

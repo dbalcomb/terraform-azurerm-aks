@@ -13,4 +13,19 @@ resource "helm_release" "main" {
     name  = "autolock.enabled"
     value = true
   }
+
+  set {
+    name  = "podAnnotations.prometheus\\.io/scrape"
+    value = "true"
+  }
+
+  set {
+    name  = "podAnnotations.prometheus\\.io/path"
+    value = "/metrics"
+  }
+
+  set {
+    name  = "podAnnotations.prometheus\\.io/port"
+    value = "8080"
+  }
 }

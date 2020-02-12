@@ -36,4 +36,24 @@ resource "helm_release" "main" {
     name  = "defaultBackend.nodeSelector.beta\\.kubernetes\\.io/os"
     value = "linux"
   }
+
+  set {
+    name  = "controller.metrics.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "controller.metrics.service.annotations.prometheus\\.io/scrape"
+    value = "true"
+  }
+
+  set {
+    name  = "controller.metrics.service.annotations.prometheus\\.io/path"
+    value = "/metrics"
+  }
+
+  set {
+    name  = "controller.metrics.service.annotations.prometheus\\.io/port"
+    value = "10254"
+  }
 }
