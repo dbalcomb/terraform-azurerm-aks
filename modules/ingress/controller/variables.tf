@@ -20,7 +20,7 @@ variable "resource_group_name" {
 }
 
 variable "enabled" {
-  description = "Enable ingress"
+  description = "Enable ingress controller"
   default     = true
   type        = bool
 }
