@@ -16,5 +16,30 @@ jobs:
     - uses: volcano-coffee-company/setup-terraform@v1
       with:
         version: ~0.12.20
+    - run: terraform fmt -check -diff -recursive
     - run: terraform init -backend=false
     - run: terraform validate
+
+  example:
+    name: example / ${{ matrix.example }}
+    runs-on: ubuntu-latest
+    if: github.repository == 'dbalcomb/terraform-azurerm-aks'
+    strategy:
+      matrix:
+        example:
+        - basic
+        - ingress
+    steps:
+    - uses: actions/checkout@v2
+    - uses: volcano-coffee-company/setup-terraform@v1
+      with:
+        version: ~0.12.20
+    - run: terraform init -input=false -backend=false
+      working-directory: ./examples/${{ matrix.example }}
+    - run: terraform plan -input=false
+      working-directory: ./examples/${{ matrix.example }}
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
