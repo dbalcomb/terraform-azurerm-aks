@@ -19,6 +19,21 @@ variable "resource_group_name" {
   type        = string
 }
 
+variable "routes" {
+  description = "The ingress route configuration"
+  default     = {}
+  type = map(object({
+    rules = list(object({
+      host = string
+      paths = list(object({
+        path                 = string
+        backend_service_name = string
+        backend_service_port = number
+      }))
+    }))
+  }))
+}
+
 variable "enabled" {
   description = "Enable ingress"
   default     = true

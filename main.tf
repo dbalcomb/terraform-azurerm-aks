@@ -112,5 +112,6 @@ module "ingress" {
   ip_address          = module.network.ip.ip_address
   resource_group_name = module.network.resource_group.name
   replicas            = try(var.ingress.replicas, 1)
+  routes              = try(var.ingress.routes, {})
   enabled             = try(var.ingress.enabled, true)
 }
