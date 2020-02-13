@@ -1,5 +1,5 @@
 terraform {
   required_providers {
-    external = ">= 1.2"
+    http = ">= 1.1"
   }
 }
