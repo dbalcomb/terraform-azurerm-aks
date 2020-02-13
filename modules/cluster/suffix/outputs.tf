@@ -1,4 +1,4 @@
 output "output" {
   description = "The cluster suffix"
-  value       = data.external.main.result.output
+  value       = data.http.main.body
 }
