@@ -1,11 +1,20 @@
+data "azuread_service_principal" "aad" {
+  count        = var.enabled ? 1 : 0
+  display_name = "Windows Azure Active Directory"
+}
+
+locals {
+  aad_scopes = { for item in try(data.azuread_service_principal.aad.0.oauth2_permissions, []) : item.value => item.id }
+}
+
 data "azuread_service_principal" "graph" {
   count        = var.enabled ? 1 : 0
   display_name = "Microsoft Graph"
 }
 
 locals {
-  roles  = { for item in try(data.azuread_service_principal.graph.0.app_roles, []) : item.value => item.id }
-  scopes = { for item in try(data.azuread_service_principal.graph.0.oauth2_permissions, []) : item.value => item.id }
+  graph_roles  = { for item in try(data.azuread_service_principal.graph.0.app_roles, []) : item.value => item.id }
+  graph_scopes = { for item in try(data.azuread_service_principal.graph.0.oauth2_permissions, []) : item.value => item.id }
 }
 
 resource "azuread_application" "main" {
@@ -16,20 +25,29 @@ resource "azuread_application" "main" {
   group_membership_claims = "All"
 
   required_resource_access {
+    resource_app_id = data.azuread_service_principal.aad.0.application_id
+
+    resource_access {
+      id   = lookup(local.aad_scopes, "User.Read")
+      type = "Scope"
+    }
+  }
+
+  required_resource_access {
     resource_app_id = data.azuread_service_principal.graph.0.application_id
 
     resource_access {
-      id   = lookup(local.roles, "Directory.Read.All")
+      id   = lookup(local.graph_roles, "Directory.Read.All")
       type = "Role"
     }
 
     resource_access {
-      id   = lookup(local.scopes, "Directory.Read.All")
+      id   = lookup(local.graph_scopes, "Directory.Read.All")
       type = "Scope"
     }
 
     resource_access {
-      id   = lookup(local.scopes, "User.Read")
+      id   = lookup(local.graph_scopes, "User.Read")
       type = "Scope"
     }
   }
