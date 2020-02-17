@@ -1,4 +1,4 @@
-# AKS / Ingress / Controller
+# Ingress Controller
 
 This module configures the ingress controller for the Azure Kubernetes Service
 (AKS) cluster. The ingress controller is responsible for routing external

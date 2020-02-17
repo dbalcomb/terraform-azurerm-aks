@@ -1,4 +1,4 @@
-# AKS / Cluster / Monitor
+# Cluster Monitor
 
 This module configures monitoring-related resources that must be set up after
 the creation of the cluster. This is separate from the [monitoring resources](../../monitor/README.md)

@@ -1,4 +1,4 @@
-# AKS / Ingress / Certificate Manager
+# Ingress Certificate Manager
 
 This module configures the `cert-manager` utility to enable the management of
 SSL certificates and the ability for the ingress controller to serve requests

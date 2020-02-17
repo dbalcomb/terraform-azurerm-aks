@@ -1,4 +1,4 @@
-# AKS / Cluster / Kured
+# Cluster Kured
 
 This module configures the `kured` utility which is used to enable automatic
 updates and restarting of Kubernetes host nodes.

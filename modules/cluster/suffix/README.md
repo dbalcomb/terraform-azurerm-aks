@@ -1,4 +1,4 @@
-# AKS / Cluster / Suffix
+# Cluster Suffix
 
 This module generates the suffix used by Azure Kubernetes Service (AKS) cluster
 resources that are provisioned by Azure. By using this module it is possible to

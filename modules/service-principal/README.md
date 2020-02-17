@@ -1,4 +1,4 @@
-# AKS / Service Principal
+# Service Principal
 
 This module configures the service principal used by the Azure Kubernetes
 Service (AKS) to interact with Azure APIs. This is required for the service

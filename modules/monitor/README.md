@@ -1,4 +1,4 @@
-# AKS / Monitor
+# Monitor
 
 This module configures the monitoring resources that are required by the Azure
 Kubernetes Service (AKS) cluster to enable monitoring.

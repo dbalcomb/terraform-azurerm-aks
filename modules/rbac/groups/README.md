@@ -1,4 +1,4 @@
-# AKS / RBAC / Groups
+# Role-Based Access Control (RBAC) Groups
 
 This module configures the Role-Based Access Control (RBAC) groups that can be
 passed to the *cluster* module to manage user authentication and permissions.

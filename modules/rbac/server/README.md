@@ -1,4 +1,4 @@
-# AKS / RBAC / Server
+# Role-Based Access Control (RBAC) Server Component
 
 This module configures the Role-Based Access Control (RBAC) server component
 that handles identity requests for Azure Active Directory (AAD) users.

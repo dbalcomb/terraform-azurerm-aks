@@ -1,4 +1,4 @@
-# AKS / Cluster
+# Cluster
 
 This module configures the Azure Kubernetes Service (AKS) cluster and combines
 the various add-on modules that can be used to add extra functionality.

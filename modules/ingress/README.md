@@ -1,4 +1,4 @@
-# AKS / Ingress
+# Ingress
 
 This module configures the resources required to enable routing and certificate
 handling in the Azure Kubernetes Service (AKS) cluster.

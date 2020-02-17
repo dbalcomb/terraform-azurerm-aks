@@ -1,4 +1,4 @@
-# AKS / Cluster / RBAC (Role-Based Access Control)
+# Cluster Role-Based Access Control (RBAC)
 
 This module configures the Role-Based Access Control (RBAC) resources that can
 only be configured after the creation of the Azure Kubernetes Service (AKS)

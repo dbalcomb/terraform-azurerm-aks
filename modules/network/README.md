@@ -1,4 +1,4 @@
-# AKS / Network
+# Network
 
 This module configures the networking resources that are required by the Azure
 Kubernetes Service (AKS) cluster.

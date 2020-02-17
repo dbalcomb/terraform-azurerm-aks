@@ -1,4 +1,4 @@
-# AKS / Cluster / Dashboard
+# Cluster Dashboard
 
 This module configures the resources required to enable read-only access to the
 Kubernetes dashboard on RBAC-enabled clusters.

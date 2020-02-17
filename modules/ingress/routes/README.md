@@ -1,4 +1,4 @@
-# AKS / Ingress / Routes
+# Ingress Routes
 
 This module configures the ingress route resources that are used to configure
 the ingress controller.

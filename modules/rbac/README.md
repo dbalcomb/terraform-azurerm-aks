@@ -1,4 +1,4 @@
-# AKS / RBAC (Role-Based Access Control)
+# Role-Based Access Control (RBAC)
 
 This module simply wraps the Role-Based Access Control (RBAC) modules that are
 required to enable Azure Active Directory (AAD) access control and permissions.
