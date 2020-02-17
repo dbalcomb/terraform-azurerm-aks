@@ -1,33 +1,12 @@
 variable "name" {
-  description = "The cluster name"
+  description = "The Azure Kubernetes Service (AKS) name"
   type        = string
 }
 
 variable "location" {
-  description = "The cluster location"
+  description = "The Azure Kubernetes Service (AKS) location"
   default     = "uksouth"
   type        = string
-}
-
-variable "dns_prefix" {
-  description = "The cluster DNS prefix"
-  type        = string
-}
-
-variable "subnets" {
-  description = "The network subnet configuration"
-  default = [
-    { name = "primary" }
-  ]
-  type = list(map(any))
-}
-
-variable "pools" {
-  description = "The cluster node pool configuration"
-  default = {
-    primary = {}
-  }
-  type = any
 }
 
 variable "registry" {
@@ -46,14 +25,20 @@ variable "rbac" {
   type        = any
 }
 
-variable "monitor" {
-  description = "The monitoring configuration"
+variable "cluster" {
+  description = "The cluster configuration"
   default     = null
   type        = any
 }
 
-variable "dashboard" {
-  description = "The dashboard configuration"
+variable "network" {
+  description = "The network configuration"
+  default     = null
+  type        = any
+}
+
+variable "monitor" {
+  description = "The monitoring configuration"
   default     = null
   type        = any
 }
@@ -62,16 +47,4 @@ variable "ingress" {
   description = "The ingress configuration"
   default     = null
   type        = any
-}
-
-variable "kured" {
-  description = "The kured configuration"
-  default     = null
-  type        = any
-}
-
-variable "kubernetes_version" {
-  description = "The Kubernetes version"
-  default     = null
-  type        = string
 }

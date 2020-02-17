@@ -6,11 +6,14 @@ module "acr" {
 }
 
 module "aks" {
-  source     = "../../" # github.com/dbalcomb/terraform-azurerm-aks
-  name       = "aks"
-  location   = "uksouth"
-  dns_prefix = "dbalcombaks"
-  registry   = module.acr
+  source   = "../../" # github.com/dbalcomb/terraform-azurerm-aks
+  name     = "aks"
+  location = "uksouth"
+  registry = module.acr
+
+  network = {
+    dns_prefix = "dbalcombaks"
+  }
 
   rbac = {
     enabled = true

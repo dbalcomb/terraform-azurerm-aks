@@ -20,6 +20,8 @@ provider "helm" {
   }
 }
 
+# SERVICE PRINCIPAL
+
 module "service_principal" {
   source = "./modules/service-principal"
   name   = var.name
@@ -36,70 +38,135 @@ module "service_principal" {
   }
 }
 
+# SUFFIX
+
+locals {
+  prefix = try(var.cluster.dns_prefix, var.network.dns_prefix, var.cluster.name, var.name)
+}
+
 module "suffix" {
   source = "./modules/cluster/suffix"
-  input  = var.dns_prefix
+  input  = local.prefix
+}
+
+# MONITOR
+
+locals {
+  monitor = {
+    name      = try(var.monitor.name, format("%s-monitor-%s", var.name, module.suffix.output))
+    location  = var.location
+    retention = try(var.monitor.retention, 30)
+    enabled   = try(var.monitor.enabled, true)
+  }
 }
 
 module "monitor" {
   source    = "./modules/monitor"
-  name      = format("%s-monitor-%s", var.name, module.suffix.output)
-  location  = var.location
-  retention = try(var.monitor.retention, 30)
-  enabled   = try(var.monitor.enabled, true)
+  name      = local.network.name
+  location  = local.network.location
+  retention = local.monitor.retention
+  enabled   = local.monitor.enabled
+}
+
+# NETWORK
+
+locals {
+  network = {
+    name       = try(var.network.name, format("%s-network-%s", var.name, module.suffix.output))
+    location   = var.location
+    dns_prefix = try(var.network.dns_prefix, var.cluster.dns_prefix, var.cluster.name, var.name)
+    subnets    = try(var.network.subnets, [{ name = "primary" }])
+  }
 }
 
 module "network" {
   source     = "./modules/network"
-  name       = format("%s-network-%s", var.name, module.suffix.output)
-  location   = var.location
-  dns_prefix = var.dns_prefix
+  name       = local.network.name
+  location   = local.network.location
+  dns_prefix = local.network.dns_prefix
 
   subnets = [
-    for subnet in var.subnets : {
+    for subnet in local.network.subnets : {
       name = subnet.name
-      bits = lookup(subnet, "bits", 8)
+      bits = try(subnet.bits, 8)
     }
   ]
 }
 
+# ROLE-BASED ACCESS CONTROL (RBAC)
+
+locals {
+  rbac = {
+    name           = try(var.rbac.name, format("%s-cluster-%s-rbac", var.name, module.suffix.output))
+    administrators = try(var.rbac.administrators, [])
+    consent        = try(var.rbac.consent, false)
+    enabled        = try(var.rbac.enabled, true)
+  }
+}
+
 module "rbac" {
   source  = "./modules/rbac"
-  name    = format("%s-cluster-%s-rbac", var.name, module.suffix.output)
-  consent = false
-  enabled = try(var.rbac.enabled, true)
+  name    = local.rbac.name
+  consent = local.rbac.consent
+  enabled = local.rbac.enabled
 
   groups = {
     admin = {
       label   = "Azure Kubernetes Service Administrators"
-      members = try(var.rbac.administrators, [])
-      enabled = try(var.rbac.enabled, true) && length(try(var.rbac.administrators, [])) > 0
+      members = local.rbac.administrators
+      enabled = local.rbac.enabled && length(local.rbac.administrators) > 0
     }
+  }
+}
+
+# CLUSTER
+
+locals {
+  cluster = {
+    name                     = try(var.cluster.name, format("%s-cluster-%s", var.name, module.suffix.output))
+    location                 = var.location
+    node_resource_group_name = try(var.cluster.node_resource_group_name, format("%s-nodepool-%s-rg", var.name, module.suffix.output))
+    dns_prefix               = try(var.cluster.dns_prefix, var.network.dns_prefix, var.cluster.name, var.name)
+    dashboard                = try(var.cluster.dashboard, {})
+    kured                    = try(var.cluster.kured, {})
+    kubernetes_version       = try(var.cluster.kubernetes_version, null)
+    pools                    = try(var.cluster.pools, { primary = {} })
   }
 }
 
 module "cluster" {
   source                   = "./modules/cluster"
-  name                     = format("%s-cluster-%s", var.name, module.suffix.output)
-  location                 = var.location
+  name                     = local.cluster.name
+  location                 = local.cluster.location
   monitor                  = module.monitor
   network                  = module.network
   service_principal        = module.service_principal
   rbac                     = module.rbac
-  dns_prefix               = var.dns_prefix
-  dashboard                = var.dashboard
-  kured                    = var.kured
-  kubernetes_version       = var.kubernetes_version
-  node_resource_group_name = format("%s-nodepool-%s-rg", var.name, module.suffix.output)
-  pools                    = var.pools
+  dns_prefix               = local.cluster.dns_prefix
+  dashboard                = local.cluster.dashboard
+  kured                    = local.cluster.kured
+  kubernetes_version       = local.cluster.kubernetes_version
+  node_resource_group_name = local.cluster.node_resource_group_name
+  pools                    = local.cluster.pools
+}
+
+# INGRESS
+
+locals {
+  ingress = {
+    name     = try(var.ingress.name, format("%s-cluster-%s-ingress", var.name, module.suffix.output))
+    replicas = try(var.ingress.replicas, 1)
+    routes   = try(var.ingress.routes, {})
+    enabled  = try(var.ingress.enabled, true)
+  }
 }
 
 module "ingress" {
   source              = "./modules/ingress"
-  name                = format("%s-cluster-%s-ingress", var.name, module.suffix.output)
+  name                = local.ingress.name
   ip_address          = module.network.ip.ip_address
   resource_group_name = module.network.resource_group.name
-  replicas            = try(var.ingress.replicas, 1)
-  routes              = try(var.ingress.routes, {})
-  enabled             = try(var.ingress.enabled, true)
+  replicas            = local.ingress.replicas
+  routes              = local.ingress.routes
+  enabled             = local.ingress.enabled
 }
