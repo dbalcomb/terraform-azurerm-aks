@@ -7,8 +7,14 @@ resource "azuread_application" "main" {
   count         = var.enabled ? 1 : 0
   name          = var.name
   type          = "native"
-  reply_urls    = [format("https://%s", var.name)]
   public_client = true
+
+  reply_urls = [
+    "https://${var.name}",
+    "https://login.microsoftonline.com/common/oauth2/nativeclient",
+    "https://afd.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
+    "https://monitoring.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
+  ]
 
   required_resource_access {
     resource_app_id = var.server.id
