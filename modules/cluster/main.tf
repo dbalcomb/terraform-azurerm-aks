@@ -1,10 +1,3 @@
-locals {
-  rbac_enabled      = try(var.rbac.enabled, true)
-  monitor_enabled   = try(var.monitor.enabled, true)
-  dashboard_enabled = try(var.dashboard.enabled, true)
-  kured_enabled     = try(var.kured.enabled, true)
-}
-
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -58,10 +51,10 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 
   role_based_access_control {
-    enabled = local.rbac_enabled
+    enabled = local.rbac.enabled
 
     dynamic "azure_active_directory" {
-      for_each = local.rbac_enabled ? [1] : []
+      for_each = local.rbac.enabled ? [1] : []
 
       content {
         client_app_id     = try(var.rbac.client.id, null)
@@ -98,11 +91,11 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
 
     kube_dashboard {
-      enabled = local.dashboard_enabled
+      enabled = local.dashboard.enabled
     }
 
     oms_agent {
-      enabled                    = local.monitor_enabled
+      enabled                    = local.monitor.enabled
       log_analytics_workspace_id = try(var.monitor.log_analytics_workspace.id, null)
     }
   }
@@ -142,10 +135,24 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
   }
 }
 
+locals {
+  dashboard = {
+    name    = format("%s-dashboard", var.name)
+    enabled = try(var.dashboard.enabled, true)
+  }
+}
+
 module "dashboard" {
   source  = "./dashboard"
-  name    = format("%s-dashboard", var.name)
-  enabled = local.dashboard_enabled
+  name    = local.dashboard.name
+  enabled = local.dashboard.enabled
+}
+
+locals {
+  monitor = {
+    name    = format("%s-monitor", var.name)
+    enabled = try(var.monitor.enabled, true)
+  }
 }
 
 module "monitor" {
@@ -153,7 +160,7 @@ module "monitor" {
   name              = format("%s-monitor", var.name)
   cluster           = azurerm_kubernetes_cluster.main
   service_principal = var.service_principal
-  enabled           = local.monitor_enabled
+  enabled           = local.monitor.enabled
 }
 
 # Note: Terraform has trouble understanding that the group keys, when used via
@@ -175,16 +182,30 @@ locals {
   }
 }
 
+locals {
+  rbac = {
+    name    = format("%s-rbac", var.name)
+    enabled = try(var.rbac.enabled, true)
+  }
+}
+
 module "rbac" {
   source  = "./rbac"
-  name    = format("%s-rbac", var.name)
+  name    = local.rbac.name
   groups  = local.groups
   cluster = azurerm_kubernetes_cluster.main
-  enabled = local.rbac_enabled
+  enabled = local.rbac.enabled
+}
+
+locals {
+  kured = {
+    name    = format("%s-kured", var.name)
+    enabled = try(var.kured.enabled, true)
+  }
 }
 
 module "kured" {
   source  = "./kured"
-  name    = format("%s-kured", var.name)
-  enabled = local.kured_enabled
+  name    = local.kured.name
+  enabled = local.kured.enabled
 }
