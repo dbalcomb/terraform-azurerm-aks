@@ -18,14 +18,15 @@ resource "azurerm_resource_group" "main" {
 locals {
   pools = {
     for name, pool in var.pools : name => {
-      subnet         = try(pool.subnet, "primary")
-      size           = try(pool.size, "Standard_D2s_v3")
-      scale          = try(pool.scale, 1)
-      auto_scale     = try(pool.auto_scale, true)
-      auto_scale_min = try(pool.auto_scale_min, 1)
-      auto_scale_max = try(pool.auto_scale_max, 3)
-      pod_limit      = try(pool.pod_limit, 250)
-      disk_size      = try(pool.disk_size, 30)
+      subnet    = try(pool.subnet, "primary")
+      size      = try(pool.size, "Standard_D2s_v3")
+      pod_limit = try(pool.pod_limit, 250)
+      disk_size = try(pool.disk_size, 30)
+
+      scale = {
+        min = try(pool.scale.min, max(min(split("-", pool.scale)...), 1), 1)
+        max = try(pool.scale.max, min(max(split("-", pool.scale)...), 100), 1)
+      }
     }
   }
 }
@@ -43,10 +44,10 @@ resource "azurerm_kubernetes_cluster" "main" {
     type                = "VirtualMachineScaleSets"
     vnet_subnet_id      = var.network.subnets.primary.id
     vm_size             = local.pools.primary.size
-    node_count          = local.pools.primary.scale
-    enable_auto_scaling = local.pools.primary.auto_scale
-    min_count           = local.pools.primary.auto_scale == true ? local.pools.primary.auto_scale_min : null
-    max_count           = local.pools.primary.auto_scale == true ? local.pools.primary.auto_scale_max : null
+    node_count          = local.pools.primary.scale.min
+    enable_auto_scaling = local.pools.primary.scale.min == local.pools.primary.scale.max ? false : true
+    min_count           = local.pools.primary.scale.min == local.pools.primary.scale.max ? null : local.pools.primary.scale.min
+    max_count           = local.pools.primary.scale.min == local.pools.primary.scale.max ? null : local.pools.primary.scale.max
     max_pods            = local.pools.primary.pod_limit
     os_disk_size_gb     = local.pools.primary.disk_size
   }
@@ -126,10 +127,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
   vnet_subnet_id        = var.network.subnets[each.value.subnet].id
   vm_size               = each.value.size
-  node_count            = each.value.scale
-  enable_auto_scaling   = each.value.auto_scale
-  min_count             = each.value.auto_scale == true ? each.value.auto_scale_min : null
-  max_count             = each.value.auto_scale == true ? each.value.auto_scale_max : null
+  node_count            = each.value.scale.min
+  enable_auto_scaling   = each.value.scale.min == each.value.scale.max ? false : true
+  min_count             = each.value.scale.min == each.value.scale.max ? null : each.value.scale.min
+  max_count             = each.value.scale.min == each.value.scale.max ? null : each.value.scale.max
   max_pods              = each.value.pod_limit
   os_disk_size_gb       = each.value.disk_size
   os_type               = "Linux"
