@@ -13,3 +13,4 @@ that handles authentication with the Kubernetes CLI (`kubectl`).
 - [AAD Client Application](https://docs.microsoft.com/en-gb/azure/aks/azure-ad-integration)
 - [AAD Client Component](https://docs.microsoft.com/en-gb/azure/aks/azure-ad-integration-cli#create-azure-ad-client-component)
 - [AKS Commander](https://github.com/rhummelmose/aks-commander/blob/master/terraform/rbac/main.tf#L15)
+- [Desktop App Registration](https://docs.microsoft.com/en-gb/azure/active-directory/develop/scenario-desktop-app-registration)
