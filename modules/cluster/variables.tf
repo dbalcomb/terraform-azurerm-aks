@@ -93,3 +93,9 @@ variable "node_resource_group_name" {
   description = "The node resource group name"
   type        = string
 }
+
+variable "kubernetes_version" {
+  description = "The Kubernetes version"
+  default     = null
+  type        = string
+}
