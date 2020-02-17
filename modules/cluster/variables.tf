@@ -48,27 +48,9 @@ variable "dns_prefix" {
 variable "pools" {
   description = "The cluster node pool configuration"
   default = {
-    primary = {
-      subnet         = "primary"
-      size           = "Standard_D2s_v3"
-      scale          = 1
-      auto_scale     = true
-      auto_scale_min = 1
-      auto_scale_max = 3
-      pod_limit      = 250
-      disk_size      = 30
-    }
+    primary = {}
   }
-  type = map(object({
-    subnet         = string
-    size           = string
-    scale          = number
-    auto_scale     = bool
-    auto_scale_min = number
-    auto_scale_max = number
-    pod_limit      = number
-    disk_size      = number
-  }))
+  type = map(any)
 }
 
 variable "rbac" {
