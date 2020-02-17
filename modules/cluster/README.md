@@ -20,3 +20,4 @@ the various add-on modules that can be used to add extra functionality.
 ## References
 
 - [Azure Kubernetes Service Tutorial](https://docs.microsoft.com/en-gb/azure/aks/tutorial-kubernetes-deploy-cluster)
+- [Cluster Autoscaler](https://docs.microsoft.com/en-gb/azure/aks/cluster-autoscaler)

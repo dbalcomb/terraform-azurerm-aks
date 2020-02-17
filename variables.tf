@@ -27,7 +27,7 @@ variable "pools" {
   default = {
     primary = {}
   }
-  type = map(any)
+  type = any
 }
 
 variable "registry" {
