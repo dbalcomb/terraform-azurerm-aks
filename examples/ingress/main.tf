@@ -6,10 +6,10 @@ module "acr" {
 }
 
 module "aks" {
-  source     = "../../" # github.com/dbalcomb/terraform-azurerm-aks
-  name       = "aks"
-  location   = "uksouth"
-  registry   = module.acr
+  source   = "../../" # github.com/dbalcomb/terraform-azurerm-aks
+  name     = "aks"
+  location = "uksouth"
+  registry = module.acr
 
   network = {
     dns_prefix = "dbalcombaks"
