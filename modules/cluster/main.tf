@@ -3,10 +3,6 @@ locals {
   monitor_enabled   = try(var.monitor.enabled, true)
   dashboard_enabled = try(var.dashboard.enabled, true)
   kured_enabled     = try(var.kured.enabled, true)
-  pools = {
-    for name, pool in var.pools : name => pool
-    if name != "primary"
-  }
 }
 
 resource "tls_private_key" "ssh" {
@@ -17,6 +13,21 @@ resource "tls_private_key" "ssh" {
 resource "azurerm_resource_group" "main" {
   name     = format("%s-rg", var.name)
   location = var.location
+}
+
+locals {
+  pools = {
+    for name, pool in var.pools : name => {
+      subnet         = try(pool.subnet, "primary")
+      size           = try(pool.size, "Standard_D2s_v3")
+      scale          = try(pool.scale, 1)
+      auto_scale     = try(pool.auto_scale, true)
+      auto_scale_min = try(pool.auto_scale_min, 1)
+      auto_scale_max = try(pool.auto_scale_max, 3)
+      pod_limit      = try(pool.pod_limit, 250)
+      disk_size      = try(pool.disk_size, 30)
+    }
+  }
 }
 
 resource "azurerm_kubernetes_cluster" "main" {
@@ -31,13 +42,13 @@ resource "azurerm_kubernetes_cluster" "main" {
     name                = "nodepool"
     type                = "VirtualMachineScaleSets"
     vnet_subnet_id      = var.network.subnets.primary.id
-    vm_size             = var.pools.primary.size
-    node_count          = var.pools.primary.scale
-    enable_auto_scaling = var.pools.primary.auto_scale
-    min_count           = var.pools.primary.auto_scale == true ? var.pools.primary.auto_scale_min : null
-    max_count           = var.pools.primary.auto_scale == true ? var.pools.primary.auto_scale_max : null
-    max_pods            = var.pools.primary.pod_limit
-    os_disk_size_gb     = var.pools.primary.disk_size
+    vm_size             = local.pools.primary.size
+    node_count          = local.pools.primary.scale
+    enable_auto_scaling = local.pools.primary.auto_scale
+    min_count           = local.pools.primary.auto_scale == true ? local.pools.primary.auto_scale_min : null
+    max_count           = local.pools.primary.auto_scale == true ? local.pools.primary.auto_scale_max : null
+    max_pods            = local.pools.primary.pod_limit
+    os_disk_size_gb     = local.pools.primary.disk_size
   }
 
   service_principal {
@@ -102,8 +113,15 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 }
 
+locals {
+  addon_pools = {
+    for name, pool in local.pools : name => pool
+    if name != "primary"
+  }
+}
+
 resource "azurerm_kubernetes_cluster_node_pool" "main" {
-  for_each              = local.pools
+  for_each              = local.addon_pools
   name                  = each.key
   kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
   vnet_subnet_id        = var.network.subnets[each.value.subnet].id
