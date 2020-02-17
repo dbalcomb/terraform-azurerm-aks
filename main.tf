@@ -79,17 +79,17 @@ module "rbac" {
 }
 
 module "cluster" {
-  source            = "./modules/cluster"
-  name              = format("%s-cluster-%s", var.name, module.suffix.output)
-  location          = var.location
-  monitor           = module.monitor
-  network           = module.network
-  service_principal = module.service_principal
-  rbac              = module.rbac
-  dns_prefix        = var.dns_prefix
-  dashboard         = var.dashboard
-  kured             = var.kured
-
+  source                   = "./modules/cluster"
+  name                     = format("%s-cluster-%s", var.name, module.suffix.output)
+  location                 = var.location
+  monitor                  = module.monitor
+  network                  = module.network
+  service_principal        = module.service_principal
+  rbac                     = module.rbac
+  dns_prefix               = var.dns_prefix
+  dashboard                = var.dashboard
+  kured                    = var.kured
+  kubernetes_version       = var.kubernetes_version
   node_resource_group_name = format("%s-nodepool-%s-rg", var.name, module.suffix.output)
 
   pools = {

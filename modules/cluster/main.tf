@@ -25,6 +25,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   resource_group_name = azurerm_resource_group.main.name
   node_resource_group = var.node_resource_group_name
   dns_prefix          = var.dns_prefix
+  kubernetes_version  = var.kubernetes_version
 
   default_node_pool {
     name                = "nodepool"

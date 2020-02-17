@@ -69,3 +69,9 @@ variable "kured" {
   default     = null
   type        = any
 }
+
+variable "kubernetes_version" {
+  description = "The Kubernetes version"
+  default     = null
+  type        = string
+}
