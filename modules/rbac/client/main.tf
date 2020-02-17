@@ -1,3 +1,12 @@
+data "azuread_service_principal" "aad" {
+  count        = var.enabled ? 1 : 0
+  display_name = "Windows Azure Active Directory"
+}
+
+locals {
+  aad_scopes = { for item in try(data.azuread_service_principal.aad.0.oauth2_permissions, []) : item.value => item.id }
+}
+
 locals {
   map    = var.server.scopes == null ? {} : var.server.scopes
   scopes = { for item in local.map : item.value => item.id }
@@ -15,6 +24,15 @@ resource "azuread_application" "main" {
     "https://afd.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
     "https://monitoring.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
   ]
+
+  required_resource_access {
+    resource_app_id = data.azuread_service_principal.aad.0.application_id
+
+    resource_access {
+      id   = lookup(local.aad_scopes, "User.Read")
+      type = "Scope"
+    }
+  }
 
   required_resource_access {
     resource_app_id = var.server.id
