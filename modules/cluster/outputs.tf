@@ -1,6 +1,6 @@
 output "kubernetes" {
   description = "The Kubernetes configuration"
-  value       = azurerm_kubernetes_cluster.main.kube_config.0
+  value       = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config.0 : azurerm_kubernetes_cluster.main.kube_config.0
 }
 
 output "ssh_public_key" {
