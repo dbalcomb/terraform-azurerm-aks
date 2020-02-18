@@ -12,11 +12,11 @@ resource "null_resource" "definitions" {
   }
 
   provisioner "local-exec" {
-    command = "kubectl apply -f ${path.module}/templates/definitions.yml"
+    command = "kubectl apply -f ${path.module}/templates/definitions.yml --kubeconfig ${path.cwd}/kubeconfig"
   }
 
   provisioner "local-exec" {
-    command = "kubectl delete -f ${path.module}/templates/definitions.yml"
+    command = "kubectl delete -f ${path.module}/templates/definitions.yml --kubeconfig ${path.cwd}/kubeconfig"
     when    = destroy
   }
 }
