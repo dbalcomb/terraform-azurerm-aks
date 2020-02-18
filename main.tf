@@ -24,7 +24,7 @@ provider "helm" {
 
 module "service_principal" {
   source = "./modules/service-principal"
-  name   = var.name
+  name   = local.cluster.name
 
   role_assignments = {
     network = {
