@@ -35,8 +35,9 @@ variable "network" {
 variable "service_principal" {
   description = "The cluster service principal"
   type = object({
-    id     = string
-    secret = string
+    id             = string
+    application_id = string
+    secret         = string
   })
 }
 
