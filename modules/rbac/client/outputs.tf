@@ -1,6 +1,6 @@
 output "id" {
   description = "The application identifier"
-  value       = try(azuread_application.main.0.id, null)
+  value       = try(azuread_application.main.0.application_id, null)
 }
 
 output "service_principal" {
