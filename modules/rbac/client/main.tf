@@ -8,8 +8,8 @@ locals {
 }
 
 locals {
-  map    = var.server.scopes == null ? {} : var.server.scopes
-  scopes = { for item in local.map : item.value => item.id }
+  list   = var.server.scopes == null ? [] : var.server.scopes
+  scopes = { for item in local.list : item.value => item.id }
 }
 
 resource "azuread_application" "main" {

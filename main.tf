@@ -62,8 +62,8 @@ locals {
 
 module "monitor" {
   source    = "./modules/monitor"
-  name      = local.network.name
-  location  = local.network.location
+  name      = local.monitor.name
+  location  = local.monitor.location
   retention = local.monitor.retention
   enabled   = local.monitor.enabled
 }

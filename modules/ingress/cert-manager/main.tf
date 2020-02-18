@@ -19,6 +19,10 @@ resource "null_resource" "definitions" {
     command = "kubectl delete -f ${path.module}/templates/definitions.yml --kubeconfig ${path.cwd}/kubeconfig"
     when    = destroy
   }
+
+  depends_on = [
+    kubernetes_namespace.main.0,
+  ]
 }
 
 resource "kubernetes_namespace" "main" {

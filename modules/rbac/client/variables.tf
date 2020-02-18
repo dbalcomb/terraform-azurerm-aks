@@ -5,7 +5,7 @@ variable "name" {
 
 variable "server" {
   description = "The server application"
-  type        = map(any)
+  type        = any
 }
 
 variable "enabled" {
