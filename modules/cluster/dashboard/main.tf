@@ -212,6 +212,5 @@ resource "kubernetes_cluster_role_binding" "main" {
     name      = "kubernetes-dashboard"
     namespace = "kube-system"
     kind      = "ServiceAccount"
-    api_group = "rbac.authorization.k8s.io"
   }
 }
