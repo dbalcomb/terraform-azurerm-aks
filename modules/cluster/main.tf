@@ -138,7 +138,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
 resource "local_file" "kubeconfig" {
   filename          = "${path.cwd}/kubeconfig"
   file_permission   = "0644"
-  sensitive_content = azurerm_kubernetes_cluster.main.kube_config_raw
+  sensitive_content = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config_raw : azurerm_kubernetes_cluster.main.kube_config_raw
 }
 
 locals {
