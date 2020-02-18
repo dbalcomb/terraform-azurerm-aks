@@ -30,7 +30,7 @@ resource "helm_release" "main" {
   }
 
   set {
-    name  = "controller.service.annotations.service.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
     value = var.resource_group_name
   }
 
