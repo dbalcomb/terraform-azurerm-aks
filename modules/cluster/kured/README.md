@@ -12,10 +12,11 @@ updates and restarting of Kubernetes host nodes.
   budgets to prevent this but the impact will be that host nodes are unable to
   restart to complete security updates.
 - The Helm chart includes the ability to limit restarts to a certain time
-  period. This happens to be between 4am and 6am.
+  period. This happens to be between 2am and 4am.
 
 ## References
 
+- [Kured Configuration](https://github.com/weaveworks/kured#configuration)
 - [Using Kured](https://docs.microsoft.com/en-gb/azure/aks/node-updates-kured)
 - [Helm Install](https://github.com/MicrosoftDocs/azure-docs/pull/45988)
 - [Helm Chart](https://github.com/helm/charts/tree/master/stable/kured)
