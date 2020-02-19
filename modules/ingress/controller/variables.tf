@@ -3,20 +3,20 @@ variable "name" {
   type        = string
 }
 
+variable "network" {
+  description = "The network configuration"
+  type = object({
+    resource_group = object({
+      name     = string
+      location = string
+    })
+  })
+}
+
 variable "replicas" {
   description = "The ingress controller replica count"
   default     = 1
   type        = number
-}
-
-variable "ip_address" {
-  description = "The ingress controller load balancer IP address"
-  type        = string
-}
-
-variable "resource_group_name" {
-  description = "The ingress controller load balancer resource group name"
-  type        = string
 }
 
 variable "enabled" {

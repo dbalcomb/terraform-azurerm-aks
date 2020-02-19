@@ -1,10 +1,9 @@
 module "controller" {
-  source              = "./controller"
-  name                = var.name
-  replicas            = var.replicas
-  ip_address          = var.ip_address
-  resource_group_name = var.resource_group_name
-  enabled             = var.enabled
+  source   = "./controller"
+  name     = var.name
+  network  = var.network
+  replicas = var.replicas
+  enabled  = var.enabled
 }
 
 module "routes" {
