@@ -12,6 +12,11 @@ resource "helm_release" "main" {
   chart      = "kured"
 
   set {
+    name  = "image.tag"
+    value = "master-f6e4062"
+  }
+
+  set {
     name  = "nodeSelector.beta\\.kubernetes\\.io/os"
     value = "linux"
   }
