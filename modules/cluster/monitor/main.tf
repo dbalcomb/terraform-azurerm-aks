@@ -43,7 +43,7 @@ resource "kubernetes_config_map" "main" {
   count = var.enabled ? 1 : 0
 
   metadata {
-    name      = var.name
+    name      = "container-azm-ms-agentconfig"
     namespace = "kube-system"
   }
 
