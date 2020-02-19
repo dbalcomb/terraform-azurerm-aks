@@ -22,8 +22,18 @@ resource "helm_release" "main" {
   }
 
   set {
-    name  = "autolock.enabled"
-    value = true
+    name  = "extraArgs.time-zone"
+    value = "Local"
+  }
+
+  set {
+    name  = "extraArgs.start-time"
+    value = "2am"
+  }
+
+  set {
+    name  = "extraArgs.end-time"
+    value = "4am"
   }
 
   set {
