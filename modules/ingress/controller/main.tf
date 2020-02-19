@@ -4,6 +4,14 @@ data "helm_repository" "main" {
   url   = "https://kubernetes-charts.storage.googleapis.com"
 }
 
+resource "azurerm_public_ip" "main" {
+  name                = format("%s-ip", var.name)
+  location            = var.network.resource_group.location
+  resource_group_name = var.network.resource_group.name
+  sku                 = "Standard"
+  allocation_method   = "Static"
+}
+
 resource "kubernetes_namespace" "main" {
   count = var.enabled ? 1 : 0
 
@@ -26,12 +34,12 @@ resource "helm_release" "main" {
 
   set {
     name  = "controller.service.loadBalancerIP"
-    value = var.ip_address
+    value = azurerm_public_ip.main.ip_address
   }
 
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
-    value = var.resource_group_name
+    value = var.network.resource_group.name
   }
 
   set {

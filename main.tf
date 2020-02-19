@@ -162,11 +162,10 @@ locals {
 }
 
 module "ingress" {
-  source              = "./modules/ingress"
-  name                = local.ingress.name
-  ip_address          = module.network.ip.ip_address
-  resource_group_name = module.network.resource_group.name
-  replicas            = local.ingress.replicas
-  routes              = local.ingress.routes
-  enabled             = local.ingress.enabled
+  source   = "./modules/ingress"
+  name     = local.ingress.name
+  network  = module.network
+  replicas = local.ingress.replicas
+  routes   = local.ingress.routes
+  enabled  = local.ingress.enabled
 }
