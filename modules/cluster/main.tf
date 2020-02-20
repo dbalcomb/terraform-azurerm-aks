@@ -165,6 +165,7 @@ module "monitor" {
   source            = "./monitor"
   name              = format("%s-monitor", var.name)
   cluster           = azurerm_kubernetes_cluster.main
+  monitor           = var.monitor
   service_principal = var.service_principal
   enabled           = local.monitor.enabled
 }

@@ -10,6 +10,12 @@ variable "cluster" {
   })
 }
 
+variable "monitor" {
+  description = "The monitor information"
+  default     = null
+  type        = any
+}
+
 variable "service_principal" {
   description = "The service principal"
   type = object({
