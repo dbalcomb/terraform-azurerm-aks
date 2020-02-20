@@ -60,3 +60,70 @@ resource "kubernetes_config_map" "main" {
     })
   }
 }
+
+resource "azurerm_monitor_diagnostic_setting" "main" {
+  count                      = var.enabled ? 1 : 0
+  name                       = "diagnostics"
+  target_resource_id         = var.cluster.id
+  log_analytics_workspace_id = var.monitor.log_analytics_workspace.id
+
+  log {
+    category = "cluster-autoscaler"
+    enabled  = true
+
+    retention_policy {
+      days    = 30
+      enabled = true
+    }
+  }
+
+  log {
+    category = "kube-apiserver"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  log {
+    category = "kube-audit"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  log {
+    category = "kube-controller-manager"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  log {
+    category = "kube-scheduler"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+}
