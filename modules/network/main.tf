@@ -29,6 +29,7 @@ resource "azurerm_subnet" "main" {
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefix       = each.value.cidr
+  service_endpoints    = ["Microsoft.Sql"]
 }
 
 resource "azurerm_public_ip" "main" {
