@@ -3,7 +3,7 @@ resource "kubernetes_ingress" "main" {
 
   metadata {
     name      = format("%s-%s", var.controller.name, each.key)
-    namespace = var.controller.namespace
+    namespace = each.value.namespace
 
     annotations = {
       "kubernetes.io/ingress.class" = "nginx"

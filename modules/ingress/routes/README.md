@@ -7,6 +7,8 @@ the ingress controller.
 
 - At this time there is no support for the `rewrite-target` annotation or for
   specifying certificate information.
+- It is not currently possible, for security reasons, to define an ingress
+  resource in a separate namespace to the backend service.
 
 ## References
 

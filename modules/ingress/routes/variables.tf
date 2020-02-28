@@ -9,6 +9,7 @@ variable "controller" {
 variable "routes" {
   description = "The route configuration"
   type = map(object({
+    namespace = string
     rules = list(object({
       host = string
       paths = list(object({

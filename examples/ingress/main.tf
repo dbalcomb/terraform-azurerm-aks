@@ -19,6 +19,7 @@ module "aks" {
     enabled = true
     routes = {
       example = {
+        namespace = "example"
         rules = [
           {
             host = "example.com"

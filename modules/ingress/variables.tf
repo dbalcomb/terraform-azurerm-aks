@@ -23,6 +23,7 @@ variable "routes" {
   description = "The ingress route configuration"
   default     = {}
   type = map(object({
+    namespace = string
     rules = list(object({
       host = string
       paths = list(object({
