@@ -58,17 +58,17 @@ resource "helm_release" "main" {
   }
 
   set {
-    name  = "controller.metrics.service.annotations.prometheus\\.io/scrape"
+    name  = "controller.podAnnotations.prometheus\\.io/scrape"
     value = "true"
   }
 
   set {
-    name  = "controller.metrics.service.annotations.prometheus\\.io/path"
+    name  = "controller.podAnnotations.prometheus\\.io/path"
     value = "/metrics"
   }
 
   set {
-    name  = "controller.metrics.service.annotations.prometheus\\.io/port"
+    name  = "controller.podAnnotations.prometheus\\.io/port"
     value = "10254"
   }
 }
