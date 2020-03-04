@@ -149,23 +149,3 @@ module "cluster" {
   node_resource_group_name = local.cluster.node_resource_group_name
   pools                    = local.cluster.pools
 }
-
-# INGRESS
-
-locals {
-  ingress = {
-    name     = try(var.ingress.name, format("%s-cluster-%s-ingress", var.name, module.suffix.output))
-    replicas = try(var.ingress.replicas, 1)
-    routes   = try(var.ingress.routes, {})
-    enabled  = try(var.ingress.enabled, true)
-  }
-}
-
-module "ingress" {
-  source   = "./modules/ingress"
-  name     = local.ingress.name
-  network  = module.network
-  replicas = local.ingress.replicas
-  routes   = local.ingress.routes
-  enabled  = local.ingress.enabled
-}
