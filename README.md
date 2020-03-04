@@ -7,7 +7,6 @@ Terraform modules for [Azure Kubernetes Service (AKS)](https://azure.microsoft.c
 This project provides the following submodules to configure the cluster:
 
 - [Cluster](modules/cluster/README.md)
-- [Ingress](modules/ingress/README.md)
 - [Monitor](modules/monitor/README.md)
 - [Network](modules/network/README.md)
 - [RBAC (Role-Based Access Control)](modules/rbac/README.md)
@@ -19,6 +18,10 @@ This project requires the following external dependencies:
 
 - [Azure Container Registry Module](https://github.com/dbalcomb/terraform-azurerm-acr)
 - [Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+## Related
+
+- [Azure Kubernetes Service Ingress](https://github.com/dbalcomb/terraform-azurerm-aks-ingress)
 
 ## To do
 
