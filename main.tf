@@ -131,6 +131,7 @@ locals {
     kured                    = try(var.cluster.kured, {})
     kubernetes_version       = try(var.cluster.kubernetes_version, null)
     pools                    = try(var.cluster.pools, { primary = {} })
+    authorized_ip_ranges     = try(var.cluster.authorized_ip_ranges, [])
   }
 }
 
@@ -148,4 +149,5 @@ module "cluster" {
   kubernetes_version       = local.cluster.kubernetes_version
   node_resource_group_name = local.cluster.node_resource_group_name
   pools                    = local.cluster.pools
+  authorized_ip_ranges     = local.cluster.authorized_ip_ranges
 }

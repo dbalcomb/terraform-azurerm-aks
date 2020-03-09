@@ -82,3 +82,9 @@ variable "kubernetes_version" {
   default     = null
   type        = string
 }
+
+variable "authorized_ip_ranges" {
+  description = "The API server authorized IP ranges"
+  default     = []
+  type        = list(string)
+}

@@ -25,12 +25,13 @@ locals {
 }
 
 resource "azurerm_kubernetes_cluster" "main" {
-  name                = format("%s-aks", var.name)
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-  node_resource_group = var.node_resource_group_name
-  dns_prefix          = var.dns_prefix
-  kubernetes_version  = var.kubernetes_version
+  name                            = format("%s-aks", var.name)
+  location                        = azurerm_resource_group.main.location
+  resource_group_name             = azurerm_resource_group.main.name
+  node_resource_group             = var.node_resource_group_name
+  dns_prefix                      = var.dns_prefix
+  kubernetes_version              = var.kubernetes_version
+  api_server_authorized_ip_ranges = var.authorized_ip_ranges
 
   default_node_pool {
     name                = "nodepool"
