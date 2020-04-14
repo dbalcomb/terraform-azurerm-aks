@@ -1,3 +1,23 @@
+output "id" {
+  description = "The cluster identifier"
+  value       = azurerm_kubernetes_cluster.main.id
+}
+
+output "name" {
+  description = "The cluster name"
+  value       = azurerm_kubernetes_cluster.main.name
+}
+
+output "group" {
+  description = "The cluster group"
+  value       = azurerm_kubernetes_cluster.main.resource_group_name
+}
+
+output "region" {
+  description = "The cluster region"
+  value       = azurerm_kubernetes_cluster.main.location
+}
+
 output "kubernetes" {
   description = "The Kubernetes configuration"
   value       = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config.0 : azurerm_kubernetes_cluster.main.kube_config.0
