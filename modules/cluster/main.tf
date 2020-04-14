@@ -169,6 +169,7 @@ module "monitor" {
   monitor           = var.monitor
   service_principal = var.service_principal
   enabled           = local.monitor.enabled
+  debug             = var.debug
 }
 
 # Note: Terraform has trouble understanding that the group keys, when used via

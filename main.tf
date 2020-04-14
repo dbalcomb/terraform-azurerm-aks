@@ -150,4 +150,5 @@ module "cluster" {
   node_resource_group_name = local.cluster.node_resource_group_name
   pools                    = local.cluster.pools
   authorized_ip_ranges     = local.cluster.authorized_ip_ranges
+  debug                    = var.debug
 }

@@ -88,3 +88,9 @@ variable "authorized_ip_ranges" {
   default     = []
   type        = list(string)
 }
+
+variable "debug" {
+  description = "Enable debugging"
+  default     = false
+  type        = bool
+}
