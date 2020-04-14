@@ -11,6 +11,7 @@ variable "location" {
 
 variable "registry" {
   description = "The container registry"
+  default     = null
   type = object({
     id = string
     resource_group = object({
