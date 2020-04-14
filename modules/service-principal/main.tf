@@ -1,3 +1,9 @@
+locals {
+  role_assignments = {
+    for key, val in var.role_assignments : key => val if val != null
+  }
+}
+
 resource "azuread_application" "main" {
   name                       = var.name
   type                       = "webapp/api"
@@ -23,7 +29,7 @@ resource "azuread_service_principal_password" "secret" {
 }
 
 resource "azurerm_role_assignment" "main" {
-  for_each             = var.role_assignments
+  for_each             = local.role_assignments
   principal_id         = azuread_service_principal.main.id
   scope                = each.value.scope
   role_definition_name = each.value.role
