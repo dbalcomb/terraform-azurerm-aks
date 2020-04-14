@@ -53,16 +53,16 @@ resource "kubernetes_config_map" "main" {
     "log-data-collection-settings" = templatefile("${path.module}/templates/log.tpl", {
       envvar_enabled            = false
       enrich_enabled            = false
-      stdout_enabled            = false
-      stdout_exclude_namespaces = ["kube-system"]
+      stdout_enabled            = var.debug
+      stdout_exclude_namespaces = var.debug ? [] : ["kube-system"]
       stderr_enabled            = true
-      stderr_exclude_namespaces = ["kube-system"]
+      stderr_exclude_namespaces = var.debug ? [] : ["kube-system"]
     })
   }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "main" {
-  count                      = var.enabled ? 1 : 0
+  count                      = var.debug ? 1 : 0
   name                       = "diagnostics"
   target_resource_id         = var.cluster.id
   log_analytics_workspace_id = var.monitor.log_analytics_workspace.id
@@ -79,51 +79,51 @@ resource "azurerm_monitor_diagnostic_setting" "main" {
 
   log {
     category = "kube-apiserver"
-    enabled  = false
+    enabled  = true
 
     retention_policy {
-      days    = 0
-      enabled = false
+      days    = 30
+      enabled = true
     }
   }
 
   log {
     category = "kube-audit"
-    enabled  = false
+    enabled  = true
 
     retention_policy {
-      days    = 0
-      enabled = false
+      days    = 30
+      enabled = true
     }
   }
 
   log {
     category = "kube-controller-manager"
-    enabled  = false
+    enabled  = true
 
     retention_policy {
-      days    = 0
-      enabled = false
+      days    = 30
+      enabled = true
     }
   }
 
   log {
     category = "kube-scheduler"
-    enabled  = false
+    enabled  = true
 
     retention_policy {
-      days    = 0
-      enabled = false
+      days    = 30
+      enabled = true
     }
   }
 
   metric {
     category = "AllMetrics"
-    enabled  = false
+    enabled  = true
 
     retention_policy {
-      days    = 0
-      enabled = false
+      days    = 30
+      enabled = true
     }
   }
 }

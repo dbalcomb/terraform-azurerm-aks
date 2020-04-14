@@ -43,3 +43,9 @@ variable "monitor" {
   default     = null
   type        = any
 }
+
+variable "debug" {
+  description = "Enable debugging"
+  default     = false
+  type        = bool
+}

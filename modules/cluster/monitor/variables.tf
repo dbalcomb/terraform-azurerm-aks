@@ -28,3 +28,9 @@ variable "enabled" {
   default     = true
   type        = bool
 }
+
+variable "debug" {
+  description = "Enable debugging"
+  default     = false
+  type        = bool
+}
