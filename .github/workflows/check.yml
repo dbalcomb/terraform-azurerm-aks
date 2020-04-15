@@ -8,8 +8,8 @@ on:
     branches:
     - master
 jobs:
-  validate:
-    name: validate
+  lint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -17,8 +17,6 @@ jobs:
       with:
         version: ~0.12.20
     - run: terraform fmt -check -diff -recursive
-    - run: terraform init -backend=false
-    - run: terraform validate
 
   example:
     name: example / ${{ matrix.example }}
@@ -34,6 +32,8 @@ jobs:
       with:
         version: ~0.12.20
     - run: terraform init -input=false -backend=false
+      working-directory: ./examples/${{ matrix.example }}
+    - run: terraform validate
       working-directory: ./examples/${{ matrix.example }}
     - run: terraform plan -input=false
       working-directory: ./examples/${{ matrix.example }}
