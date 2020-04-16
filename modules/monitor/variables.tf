@@ -19,3 +19,9 @@ variable "enabled" {
   default     = true
   type        = bool
 }
+
+variable "tags" {
+  description = "The resource tags"
+  default     = {}
+  type        = map(string)
+}

@@ -14,6 +14,7 @@ locals {
 resource "azurerm_resource_group" "main" {
   name     = format("%s-rg", var.name)
   location = var.location
+  tags     = var.tags
 }
 
 resource "azurerm_virtual_network" "main" {
@@ -21,6 +22,7 @@ resource "azurerm_virtual_network" "main" {
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   address_space       = [var.address_space]
+  tags                = var.tags
 }
 
 resource "azurerm_subnet" "main" {
@@ -39,4 +41,5 @@ resource "azurerm_public_ip" "main" {
   sku                 = "Standard"
   allocation_method   = "Static"
   domain_name_label   = var.dns_prefix
+  tags                = var.tags
 }
