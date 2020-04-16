@@ -20,6 +20,13 @@ provider "helm" {
   }
 }
 
+locals {
+  tags = merge({
+    "environment" = "production"
+    "provisioner" = "terraform"
+  }, var.tags)
+}
+
 # SERVICE PRINCIPAL
 
 module "service_principal" {
@@ -57,6 +64,7 @@ locals {
     location  = var.location
     retention = try(var.monitor.retention, 30)
     enabled   = try(var.monitor.enabled, true)
+    tags      = merge({ component = "monitor" }, local.tags)
   }
 }
 
@@ -66,6 +74,7 @@ module "monitor" {
   location  = local.monitor.location
   retention = local.monitor.retention
   enabled   = local.monitor.enabled
+  tags      = local.monitor.tags
 }
 
 # NETWORK
@@ -76,6 +85,7 @@ locals {
     location   = var.location
     dns_prefix = try(var.network.dns_prefix, var.cluster.dns_prefix, var.cluster.name, var.name)
     subnets    = try(var.network.subnets, [{ name = "primary" }])
+    tags       = merge({ component = "network" }, local.tags)
   }
 }
 
@@ -84,6 +94,7 @@ module "network" {
   name       = local.network.name
   location   = local.network.location
   dns_prefix = local.network.dns_prefix
+  tags       = local.network.tags
 
   subnets = [
     for subnet in local.network.subnets : {
@@ -132,6 +143,7 @@ locals {
     kubernetes_version       = try(var.cluster.kubernetes_version, null)
     pools                    = try(var.cluster.pools, { primary = {} })
     authorized_ip_ranges     = try(var.cluster.authorized_ip_ranges, [])
+    tags                     = merge({ component = "cluster" }, local.tags)
   }
 }
 
@@ -150,5 +162,6 @@ module "cluster" {
   node_resource_group_name = local.cluster.node_resource_group_name
   pools                    = local.cluster.pools
   authorized_ip_ranges     = local.cluster.authorized_ip_ranges
+  tags                     = local.cluster.tags
   debug                    = var.debug
 }

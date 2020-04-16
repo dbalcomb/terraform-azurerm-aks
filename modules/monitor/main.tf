@@ -2,6 +2,7 @@ resource "azurerm_resource_group" "main" {
   count    = var.enabled ? 1 : 0
   name     = format("%s-rg", var.name)
   location = var.location
+  tags     = var.tags
 }
 
 resource "azurerm_log_analytics_workspace" "main" {
@@ -11,6 +12,7 @@ resource "azurerm_log_analytics_workspace" "main" {
   location            = azurerm_resource_group.main.0.location
   sku                 = "PerGB2018"
   retention_in_days   = var.retention
+  tags                = var.tags
 }
 
 resource "azurerm_log_analytics_solution" "container_insights" {

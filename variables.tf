@@ -49,3 +49,9 @@ variable "debug" {
   default     = false
   type        = bool
 }
+
+variable "tags" {
+  description = "The resource tags"
+  default     = {}
+  type        = map(string)
+}

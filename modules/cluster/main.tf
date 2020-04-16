@@ -6,6 +6,7 @@ resource "tls_private_key" "ssh" {
 resource "azurerm_resource_group" "main" {
   name     = format("%s-rg", var.name)
   location = var.location
+  tags     = var.tags
 }
 
 locals {
@@ -32,6 +33,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   dns_prefix                      = var.dns_prefix
   kubernetes_version              = var.kubernetes_version
   api_server_authorized_ip_ranges = var.authorized_ip_ranges
+  tags                            = var.tags
 
   default_node_pool {
     name                = "nodepool"
@@ -128,6 +130,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
   max_pods              = each.value.pod_limit
   os_disk_size_gb       = each.value.disk_size
   os_type               = "Linux"
+  tags                  = var.tags
 
   lifecycle {
     ignore_changes = [
