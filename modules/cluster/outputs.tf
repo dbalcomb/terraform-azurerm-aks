@@ -23,6 +23,12 @@ output "kubernetes" {
   value       = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config.0 : azurerm_kubernetes_cluster.main.kube_config.0
 }
 
+output "kubeconfig" {
+  description = "The Kubernetes configuration file"
+  value       = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config_raw : azurerm_kubernetes_cluster.main.kube_config_raw
+  sensitive   = true
+}
+
 output "ssh_public_key" {
   description = "The SSH public key"
   value       = tls_private_key.ssh.public_key_pem
