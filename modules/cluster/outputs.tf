@@ -21,6 +21,7 @@ output "region" {
 output "kubernetes" {
   description = "The Kubernetes configuration"
   value       = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config.0 : azurerm_kubernetes_cluster.main.kube_config.0
+  sensitive   = true
 }
 
 output "kubeconfig" {
