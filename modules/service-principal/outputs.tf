@@ -21,4 +21,5 @@ output "display_name" {
 output "secret" {
   description = "The client secret / application password"
   value       = azuread_service_principal_password.secret.value
+  sensitive   = true
 }
