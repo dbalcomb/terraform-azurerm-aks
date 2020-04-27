@@ -17,7 +17,7 @@ module "service_principal" {
       role  = "Network Contributor"
     }
     registry = var.registry == null ? null : {
-      scope = var.registry.resource_group.id
+      scope = var.registry.id
       role  = "AcrPull"
     }
   }

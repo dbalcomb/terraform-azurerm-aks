@@ -14,9 +14,6 @@ variable "registry" {
   default     = null
   type = object({
     id = string
-    resource_group = object({
-      id = string
-    })
   })
 }
 
