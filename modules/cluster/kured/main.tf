@@ -1,14 +1,8 @@
-data "helm_repository" "main" {
-  count = var.enabled ? 1 : 0
-  name  = "stable"
-  url   = "https://kubernetes-charts.storage.googleapis.com"
-}
-
 resource "helm_release" "main" {
   count      = var.enabled ? 1 : 0
   name       = var.name
   namespace  = "kube-system"
-  repository = data.helm_repository.main.0.metadata.0.name
+  repository = "https://weaveworks.github.io/kured"
   chart      = "kured"
 
   set {

@@ -2,6 +2,17 @@
 
 Terraform modules for [Azure Kubernetes Service (AKS)](https://azure.microsoft.com/en-gb/services/kubernetes-service/).
 
+## Upgrade
+
+Upgrading to use the `azurerm` provider 2.0 requires the following commands as
+the `user_impersonation` scope is no longer automatically provided. The scope
+identifiers can be obtained from the existing state.
+
+```sh
+terraform import module.${MODULE_NAME}.module.service_principal.random_uuid.user_impersonation_scope ${SCOPE_ID_1}
+terraform import module.${MODULE_NAME}.module.rbac.module.server.random_uuid.user_impersonation_scope ${SCOPE_ID_2}
+```
+
 ## Modules
 
 This project provides the following submodules to configure the cluster:

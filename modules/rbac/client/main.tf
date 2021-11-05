@@ -4,26 +4,35 @@ data "azuread_service_principal" "aad" {
 }
 
 locals {
-  aad_scopes = { for item in try(data.azuread_service_principal.aad.0.oauth2_permissions, []) : item.value => item.id }
+  aad_scopes = try(data.azuread_service_principal.aad.0.oauth2_permission_scope_ids, {})
 }
 
 locals {
-  list   = var.server.scopes == null ? [] : var.server.scopes
-  scopes = { for item in local.list : item.value => item.id }
+  server_scopes = var.server.scopes == null ? {} : var.server.scopes
 }
 
 resource "azuread_application" "main" {
-  count         = var.enabled ? 1 : 0
-  name          = var.name
-  type          = "native"
-  public_client = true
+  count                          = var.enabled ? 1 : 0
+  display_name                   = var.name
+  fallback_public_client_enabled = true
 
-  reply_urls = [
-    "https://${var.name}",
-    "https://login.microsoftonline.com/common/oauth2/nativeclient",
-    "https://afd.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
-    "https://monitoring.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
-  ]
+  web {
+    redirect_uris = []
+
+    implicit_grant {
+      access_token_issuance_enabled = false
+      id_token_issuance_enabled     = true
+    }
+  }
+
+  public_client {
+    redirect_uris = [
+      "https://${var.name}",
+      "https://login.microsoftonline.com/common/oauth2/nativeclient",
+      "https://afd.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
+      "https://monitoring.hosting.portal.azure.net/monitoring/Content/iframe/infrainsights.app/web/base-libs/auth/auth.html",
+    ]
+  }
 
   required_resource_access {
     resource_app_id = data.azuread_service_principal.aad.0.application_id
@@ -38,7 +47,7 @@ resource "azuread_application" "main" {
     resource_app_id = var.server.id
 
     resource_access {
-      id   = lookup(local.scopes, "user_impersonation")
+      id   = lookup(local.server_scopes, "user_impersonation")
       type = "Scope"
     }
   }
