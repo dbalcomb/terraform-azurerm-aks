@@ -9,8 +9,9 @@ locals {
 }
 
 resource "azuread_group" "main" {
-  for_each = local.groups
-  name     = each.value.label
+  for_each         = local.groups
+  display_name     = each.value.label
+  security_enabled = true
 }
 
 locals {

@@ -5,7 +5,7 @@ output "id" {
 
 output "scopes" {
   description = "The OAuth 2.0 permission scopes"
-  value       = try(azuread_application.main.0.oauth2_permissions, null)
+  value       = try(azuread_application.main.0.oauth2_permission_scope_ids, null)
 }
 
 output "secret" {

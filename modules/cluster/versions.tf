@@ -1,7 +1,9 @@
 terraform {
+  required_version = "~> 1.0"
+
   required_providers {
-    azurerm = ">= 2.5"
-    local   = ">= 1.4"
-    tls     = ">= 2.1"
+    azurerm = "~> 2.83"
+    local   = "~> 2.1"
+    tls     = "~> 3.1"
   }
 }

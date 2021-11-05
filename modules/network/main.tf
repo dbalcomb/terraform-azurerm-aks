@@ -30,7 +30,7 @@ resource "azurerm_subnet" "main" {
   name                 = each.value.name
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefix       = each.value.cidr
+  address_prefixes     = [each.value.cidr]
   service_endpoints    = ["Microsoft.Sql"]
 }
 
