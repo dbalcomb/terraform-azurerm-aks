@@ -60,12 +60,6 @@ variable "rbac" {
   type        = any
 }
 
-variable "dashboard" {
-  description = "The dashboard configuration"
-  default     = null
-  type        = any
-}
-
 variable "kured" {
   description = "The kured configuration"
   default     = null
