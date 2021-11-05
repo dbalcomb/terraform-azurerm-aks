@@ -191,16 +191,3 @@ module "rbac" {
   cluster = azurerm_kubernetes_cluster.main
   enabled = local.rbac.enabled
 }
-
-locals {
-  kured = {
-    name    = format("%s-kured", var.name)
-    enabled = try(var.kured.enabled, true)
-  }
-}
-
-module "kured" {
-  source  = "./kured"
-  name    = local.kured.name
-  enabled = local.kured.enabled
-}
