@@ -93,10 +93,6 @@ resource "azurerm_kubernetes_cluster" "main" {
       enabled = true
     }
 
-    kube_dashboard {
-      enabled = local.dashboard.enabled
-    }
-
     oms_agent {
       enabled                    = local.monitor.enabled
       log_analytics_workspace_id = try(var.monitor.log_analytics_workspace.id, null)
@@ -143,19 +139,6 @@ resource "local_file" "kubeconfig" {
   filename          = "${path.cwd}/kubeconfig"
   file_permission   = "0644"
   sensitive_content = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config_raw : azurerm_kubernetes_cluster.main.kube_config_raw
-}
-
-locals {
-  dashboard = {
-    name    = format("%s-dashboard", var.name)
-    enabled = try(var.dashboard.enabled, true)
-  }
-}
-
-module "dashboard" {
-  source  = "./dashboard"
-  name    = local.dashboard.name
-  enabled = local.dashboard.enabled
 }
 
 locals {
