@@ -116,7 +116,6 @@ locals {
     location                 = var.location
     node_resource_group_name = try(var.cluster.node_resource_group_name, format("%s-nodepool-%s-rg", var.name, module.suffix.output))
     dns_prefix               = try(var.cluster.dns_prefix, var.network.dns_prefix, var.cluster.name, var.name)
-    kured                    = try(var.cluster.kured, {})
     kubernetes_version       = try(var.cluster.kubernetes_version, null)
     pools                    = try(var.cluster.pools, { primary = {} })
     authorized_ip_ranges     = try(var.cluster.authorized_ip_ranges, [])
@@ -133,7 +132,6 @@ module "cluster" {
   service_principal        = module.service_principal
   rbac                     = module.rbac
   dns_prefix               = local.cluster.dns_prefix
-  kured                    = local.cluster.kured
   kubernetes_version       = local.cluster.kubernetes_version
   node_resource_group_name = local.cluster.node_resource_group_name
   pools                    = local.cluster.pools

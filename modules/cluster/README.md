@@ -5,7 +5,6 @@ the various add-on modules that can be used to add extra functionality.
 
 ## Modules
 
-- [Kured](kured/README.md)
 - [Monitor](monitor/README.md)
 - [RBAC](rbac/README.md)
 - [Suffix](suffix/README.md)
