@@ -148,14 +148,12 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
 
 locals {
   monitor = {
-    name    = format("%s-monitor", var.name)
     enabled = try(var.monitor.enabled, true)
   }
 }
 
 module "monitor" {
   source            = "./monitor"
-  name              = format("%s-monitor", var.name)
   cluster           = azurerm_kubernetes_cluster.main
   monitor           = var.monitor
   service_principal = var.service_principal
