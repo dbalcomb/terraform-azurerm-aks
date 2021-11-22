@@ -1,6 +1,6 @@
-# Role-Based Access Control (RBAC) Groups
+# Role-Based Access Control (RBAC) Group
 
-This module configures the Role-Based Access Control (RBAC) groups that can be
+This module configures the Role-Based Access Control (RBAC) group that can be
 passed to the *cluster* module to manage user authentication and permissions.
 
 ## Notes

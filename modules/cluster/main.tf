@@ -25,6 +25,13 @@ locals {
   }
 }
 
+locals {
+  rbac = {
+    enabled      = try(var.rbac.enabled, true)
+    admin_groups = try(var.rbac.admin_groups, {})
+  }
+}
+
 resource "azurerm_kubernetes_cluster" "main" {
   name                            = format("%s-aks", var.name)
   location                        = azurerm_resource_group.main.location
@@ -60,9 +67,9 @@ resource "azurerm_kubernetes_cluster" "main" {
       for_each = local.rbac.enabled ? [1] : []
 
       content {
-        client_app_id     = try(var.rbac.client.id, null)
-        server_app_id     = try(var.rbac.server.id, null)
-        server_app_secret = try(var.rbac.server.secret, null)
+        managed                = true
+        azure_rbac_enabled     = true
+        admin_group_object_ids = [for group in local.rbac.admin_groups : group.id]
       }
     }
   }
@@ -91,6 +98,10 @@ resource "azurerm_kubernetes_cluster" "main" {
   addon_profile {
     azure_policy {
       enabled = true
+    }
+
+    kube_dashboard {
+      enabled = false
     }
 
     oms_agent {
@@ -135,12 +146,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "main" {
   }
 }
 
-resource "local_file" "kubeconfig" {
-  filename          = "${path.cwd}/kubeconfig"
-  file_permission   = "0644"
-  sensitive_content = local.rbac.enabled ? azurerm_kubernetes_cluster.main.kube_admin_config_raw : azurerm_kubernetes_cluster.main.kube_config_raw
-}
-
 locals {
   monitor = {
     name    = format("%s-monitor", var.name)
@@ -156,38 +161,4 @@ module "monitor" {
   service_principal = var.service_principal
   enabled           = local.monitor.enabled
   debug             = var.debug
-}
-
-# Note: Terraform has trouble understanding that the group keys, when used via
-# try and lookup functions, are already known before the apply stage. We must
-# therefore use the group configuration, which does not have this problem, and
-# remap the values.
-#
-# Todo: Remove the following locals when the above limitation is fixed or when
-# the ability to provide optional nested values is added.
-#
-# See:
-# https://github.com/hashicorp/terraform/issues/19898
-
-locals {
-  groups_conf = try(var.rbac.groups.config, {})
-  groups_list = try(var.rbac.groups.groups, {})
-  groups = {
-    for key in keys(local.groups_conf) : key => local.groups_list[key]
-  }
-}
-
-locals {
-  rbac = {
-    name    = format("%s-rbac", var.name)
-    enabled = try(var.rbac.enabled, true)
-  }
-}
-
-module "rbac" {
-  source  = "./rbac"
-  name    = local.rbac.name
-  groups  = local.groups
-  cluster = azurerm_kubernetes_cluster.main
-  enabled = local.rbac.enabled
 }
