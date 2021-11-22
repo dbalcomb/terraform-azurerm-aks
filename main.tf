@@ -84,27 +84,16 @@ module "network" {
 
 # ROLE-BASED ACCESS CONTROL (RBAC)
 
-locals {
-  rbac = {
-    name           = try(var.rbac.name, format("%s-cluster-%s-rbac", var.name, module.suffix.output))
-    administrators = try(var.rbac.administrators, [])
-    consent        = try(var.rbac.consent, false)
-    enabled        = try(var.rbac.enabled, true)
-  }
+module "administrators" {
+  source  = "./modules/group"
+  label   = "Azure Kubernetes Service Administrators"
+  members = try(var.rbac.administrators, [])
 }
 
-module "rbac" {
-  source  = "./modules/rbac"
-  name    = local.rbac.name
-  consent = local.rbac.consent
-  enabled = local.rbac.enabled
-
-  groups = {
-    admin = {
-      label   = "Azure Kubernetes Service Administrators"
-      members = local.rbac.administrators
-      enabled = local.rbac.enabled && length(local.rbac.administrators) > 0
-    }
+locals {
+  rbac = {
+    administrators = try(var.rbac.administrators, [])
+    admin_groups   = { (module.administrators.id) : module.administrators }
   }
 }
 
@@ -130,7 +119,7 @@ module "cluster" {
   monitor                  = module.monitor
   network                  = module.network
   service_principal        = module.service_principal
-  rbac                     = module.rbac
+  rbac                     = local.rbac
   dns_prefix               = local.cluster.dns_prefix
   kubernetes_version       = local.cluster.kubernetes_version
   node_resource_group_name = local.cluster.node_resource_group_name

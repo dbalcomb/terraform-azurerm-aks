@@ -18,9 +18,9 @@ terraform import module.${MODULE_NAME}.module.rbac.module.server.random_uuid.use
 This project provides the following submodules to configure the cluster:
 
 - [Cluster](modules/cluster/README.md)
+- [Group](modules/group/README.md)
 - [Monitor](modules/monitor/README.md)
 - [Network](modules/network/README.md)
-- [RBAC (Role-Based Access Control)](modules/rbac/README.md)
 - [Service Principal](modules/service-principal/README.md)
 
 ## Dependencies
@@ -28,7 +28,6 @@ This project provides the following submodules to configure the cluster:
 This project requires the following external dependencies:
 
 - [Azure Container Registry Module](https://github.com/dbalcomb/terraform-azurerm-acr)
-- [Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
 ## Related
 
