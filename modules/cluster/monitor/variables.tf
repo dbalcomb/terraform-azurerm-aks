@@ -1,8 +1,3 @@
-variable "name" {
-  description = "The resource name"
-  type        = string
-}
-
 variable "cluster" {
   description = "The cluster"
   type = object({
