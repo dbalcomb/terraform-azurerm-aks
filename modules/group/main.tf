@@ -4,7 +4,6 @@ data "azuread_user" "main" {
 }
 
 locals {
-  label   = var.label
   members = {
     for member in var.members : member => {
       id    = data.azuread_user.main[member].id
