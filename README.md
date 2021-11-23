@@ -19,6 +19,7 @@ This project provides the following submodules to configure the cluster:
 
 - [Cluster](modules/cluster/README.md)
 - [Group](modules/group/README.md)
+- [Insights](modules/insights/README.md)
 - [Monitor](modules/monitor/README.md)
 - [Network](modules/network/README.md)
 - [Service Principal](modules/service-principal/README.md)
