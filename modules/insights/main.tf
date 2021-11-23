@@ -51,10 +51,10 @@ resource "kubernetes_config_map" "main" {
   data = {
     "schema-version" = "v1"
     "prometheus-data-collection-settings" = templatefile("${path.module}/templates/prometheus.tpl", {
-      enabled         = try(var.prometheus.enabled, false)
-      interval        = format("%q", tostring(try(var.prometheus.interval, "1m")))
-      include_fields  = [for s in try(var.prometheus.include_fields, []) : format("%q", s)]
-      exclude_fields  = [for s in try(var.prometheus.exclude_fields, local.default_exclude_fields) : format("%q", s)]
+      enabled        = try(var.prometheus.enabled, false)
+      interval       = format("%q", tostring(try(var.prometheus.interval, "1m")))
+      include_fields = [for s in try(var.prometheus.include_fields, []) : format("%q", s)]
+      exclude_fields = [for s in try(var.prometheus.exclude_fields, local.default_exclude_fields) : format("%q", s)]
     })
     "log-data-collection-settings" = templatefile("${path.module}/templates/log.tpl", {
       env_enabled               = try(var.log.env_enabled, false)
